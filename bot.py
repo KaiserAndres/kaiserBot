@@ -10,14 +10,6 @@
     also to perform other sort of stuff such as a personal archive for me cause
     I really never set that up.
 
-    TODO:
-        * Multiple separate dices (!Roll 2#1d20) --DONE
-        * Tarot cause I liked it 
-        * Help command (!Help) --DONE
-        * Save data on a server for analytics (maybe?)
-        * Actually finish the damn thing
-        * Archive
-
     Bugs list: <<Might get moved to another file, idk>> <<Move to git now>>
         <R> 01: Will stop sending a message at a space isntead of at a \n
         <R>02: The dice doesn't get the correct xdy values, hash doesn't work.
