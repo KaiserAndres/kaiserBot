@@ -234,17 +234,19 @@ while 1:
 
             for time in range(0, amountOfCards):
                 cardIndex = random.randint(0, len(localDeck))
-                cardsSpreaded.append(localDeck[cardIndex])
                 reversedOrNot = random.randint(0,1)
-                if reversedOrNot == 0:
-                    cardsSpreaded.append("||"+localDeck[cardIndex]+"||")
-                else:
-                    cardsSpreaded.append("||"+localDeck[cardIndex]+"(reversed)||")
+                print(reversedOrNot) 
+                if reversedOrNot == 1:
+                    print(reversedOrNot == 1, "1")
+                    cardsSpreaded.append("||"+localDeck[cardIndex]+"(reversed)")
+                elif reversedOrNot != 1:
+                    print(reversedOrNot != 1, "0")
+                    cardsSpreaded.append("||"+localDeck[cardIndex])
                 localDeck.remove(localDeck[cardIndex]) # Eliminates the card from the deck so it doesn't come twice
 
             chann = (text.split(":")[1]).split(" ")[2]
             messageToSend = "You got these cards: "
-            
+
             for card in cardsSpreaded:
                 messageToSend = messageToSend + card
 
