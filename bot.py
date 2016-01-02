@@ -34,8 +34,9 @@ def getCommand(text):
 def makeDeck(deck):
     '''
         Paramenters:
-            deck: file with the cards saved as a line each.
-        
+            deck: string of the location fo the file with the cards saved
+                as a line each.
+
         Returns a deck array containing the cards located in the file deck.
     '''
     deckFile = open(deck, "r")
