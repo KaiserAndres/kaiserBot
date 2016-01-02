@@ -31,11 +31,14 @@ def getCommand(text):
     parts = text.split(":")
     return parts[len(parts)-1]
 
-def makeDeck():
+def makeDeck(deck):
     '''
-        Returns a deck array containing the cards located in the file "deck"
+        Paramenters:
+            deck: file with the cards saved as a line each.
+        
+        Returns a deck array containing the cards located in the file deck.
     '''
-    deckFile = open("deck", "r")
+    deckFile = open(deck, "r")
     baseDeck = deckFile.readlines()
     for index in range(0, len(baseDeck)):
         baseDeck[index] = baseDeck[index][:-1]
