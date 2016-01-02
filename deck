@@ -50,9 +50,25 @@ King of Cups
 Page of Swords
 Queen of Swords
 King of Swords
-
-With this file edit it and set this as a list for the program to get, format
-it in list form.
-
-An element of a list can be removed using *.remove()
-Generate a random number between 0 and 1 to set to reversed.
+The Fool
+The Magician
+The High Priestess
+The Empress
+The Emperor
+The Hierophant
+The Lovers
+The Chariot
+Strength
+The Hermit
+Wheel of Fortune
+Justice
+The Hanged Man
+Death
+Temperance
+The Devil
+The Tower
+The Star
+The Moon
+The Sun
+Judgment
+The World

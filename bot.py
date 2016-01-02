@@ -31,6 +31,16 @@ def getCommand(text):
     parts = text.split(":")
     return parts[len(parts)-1]
 
+def makeDeck():
+    '''
+        Returns a deck array containing the cards located in the file "deck"
+    '''
+    deckFile = open("deck", "r")
+    baseDeck = deckFile.readlines()
+    for index in range(0, len(baseDeck)):
+        baseDeck[index] = baseDeck[index][:-1]
+    return baseDeck
+
 server = "irc.esper.net"
 channel = "#RPGStuck"
 botnick = "KaiserBot"
@@ -199,6 +209,7 @@ while 1:
                     * king
                 Major arcana have 22 cards.
             '''
+
 
     if text.find("!HELP") != -1:
         '''
