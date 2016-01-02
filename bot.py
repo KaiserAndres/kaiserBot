@@ -187,7 +187,7 @@ while 1:
 
     if text.find("!TAROT") != -1:
         command = getCommand(text)
-        if command[0] == "!":
+        if command[0] == "!" and text.find("PRIVMSG") != -1:
             '''
                 Tarot command asks for the number of cards to be drawed and returns them.
                 A tarot command has the following structure:
@@ -226,7 +226,11 @@ while 1:
                 except ValueError:
                     continue
 
-            amountOfCards = int(numberBuffer)
+            try:
+                amountOfCards = int(numberBuffer)
+            except ValueError:
+                amountOfCards = 1
+            
             cardsSpreaded = []
 
             if amountOfCards > len(localDeck):
