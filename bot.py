@@ -237,12 +237,19 @@ while 1:
                 amountOfCards = len(localDeck)
 
             for time in range(0, amountOfCards):
-                cardIndex = random.randint(0, len(localDeck))
+                cardIndex = random.randint(0, len(localDeck)-1)
                 reversedOrNot = random.randint(0,1)
                 if reversedOrNot == 1:
-                    cardsSpreaded.append("||"+localDeck[cardIndex]+"(reversed)")
+                    if time != 0:
+                        cardsSpreaded.append("||"+localDeck[cardIndex]+"(reversed)")
+                    else:
+                        cardsSpreaded.append(localDeck[cardIndex]+"(reversed)")
+
                 elif reversedOrNot != 1:
-                    cardsSpreaded.append("||"+localDeck[cardIndex])
+                    if time != 0:
+                        cardsSpreaded.append("||"+localDeck[cardIndex])
+                    else:
+                        cardsSpreaded.append(localDeck[cardIndex])
                 localDeck.remove(localDeck[cardIndex]) # Eliminates the card from the deck so it doesn't come twice
 
             chann = (text.split(":")[1]).split(" ")[2]
