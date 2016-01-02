@@ -87,11 +87,13 @@ while 1:
             middleDFlag = False
             plusFlag = False
             hashFlag = False
-            numberInCommand = ""
+            numberInCommand = "" # Buffer for the number
             messageToSend = ""
             command = command + " "
             chann = (text.split(":")[1]).split(" ")[2]
             for index in range(0, len(command)):
+
+                # Separates the values
 
                 if command[index] == "#":
                     diceNumbers[3] = int(numberInCommand)
@@ -169,6 +171,12 @@ while 1:
                 irc.send(message.encode("utf-8"))
 
     if text.find("!HELP") != -1:
+        '''
+            Help command, displays a string with help info.
+                * What the bot is
+                * How to use the commands
+                * Where do download the bot
+        '''
         command = getCommand(text)
         if command[0] == "!":
             chann = (text.split(":")[1]).split(" ")[2]
