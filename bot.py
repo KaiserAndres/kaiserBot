@@ -170,6 +170,36 @@ while 1:
                 message = "PRIVMSG "+chann+" :"+"Error 02: bad channel."+"\r\n"
                 irc.send(message.encode("utf-8"))
 
+    if text.find("!TAROT") != -1:
+        command = getCommand(text)
+        if command[0] == "!":
+            '''
+                Tarot command asks for the number of cards to be drawed and returns them.
+                A tarot command has the following structure:
+                    !tarot <NUMBER OF CARDS>
+                Thre are 5 types:
+                    * Major arcana
+                    * Swords
+                    * Wands
+                    * Pentacles
+                    * Cups
+                The minor arcana have the following cards:
+                    * 1
+                    * 2
+                    * 3
+                    * 4
+                    * 5
+                    * 6
+                    * 7
+                    * 8
+                    * 9
+                    * 10
+                    * page
+                    * queen
+                    * king
+                Major arcana have 22 cards.
+            '''
+
     if text.find("!HELP") != -1:
         '''
             Help command, displays a string with help info.
