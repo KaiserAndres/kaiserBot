@@ -44,6 +44,7 @@ def makeDeck(deck):
     for index in range(0, len(baseDeck)):
         baseDeck[index] = baseDeck[index][:-1]
     return baseDeck
+    deckFile.close()
 
 server = "irc.esper.net"
 channel = "#RPGStuck"
