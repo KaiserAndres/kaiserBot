@@ -45,7 +45,6 @@ def makeDeck(deck):
         baseDeck[index] = baseDeck[index][:-1]
     return baseDeck
 
-tarotDeck = makeDeck("deck")
 server = "irc.esper.net"
 channel = "#RPGStuck"
 botnick = "KaiserBot"
@@ -214,7 +213,7 @@ while 1:
                     * king
                 Major arcana have 22 cards.
             '''
-            localDeck = tarotDeck
+            localDeck = makeDeck("deck")
             numberBuffer = ""
             numberEnd = 9
 
