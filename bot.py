@@ -233,8 +233,8 @@ while 1:
 
             cardsSpreaded = []
 
-            if amountOfCards > len(localDeck):
-                amountOfCards = len(localDeck)
+            if amountOfCards > 15:
+                amountOfCards = 15
 
             for time in range(0, amountOfCards):
                 cardIndex = random.randint(0, len(localDeck)-1)
