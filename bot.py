@@ -79,6 +79,34 @@ def roll(pararelRolls, diceAmmount, diceSize):
         rolledArray.append(rollSum)
     return rolledArray
 
+def getRolledNumbers(command):
+    '''
+        parameters:
+            command: String with the following format:
+                !roll a#xdy+z
+        Returns an array where the indexes give:
+            0: pararelRolls -> default: 1
+            1: diceAmmount  -> default: 1
+            2: diceSize     -> default: 20
+            3: modifier     -> default: 0
+    '''
+    rollNumbers = [1, 1, 20, 0]
+    numbers = command.split()[1] #Will always be 1 because of space locations.
+    if numbers.find("#") != -1:
+        rollNumbers[0] = int(numbers.split("#")[0])
+        numbers = numbers.split("#")[1]
+    if numbers.find("D") != -1:
+        rollNumbers[1] = int(numbers.split("D")[0])
+        numbers = numbers.split("D")[1]
+    if numbers.find("+") != -1:
+        rollNumbers[2] = int(numbers.split("+")[0])
+        rollNumbers[3] = int(numbers.split("+")[1])
+        numbers = ""
+    if numbers.find("-") != -1:
+        rollNumbers[2] = int(numbers.split("-")[0])
+        rollNumbers[3] = int(numbers.split("-")[1])*(-1)
+        numbers = ""
+    return rollNumbers
 
 
 server = "irc.esper.net"
@@ -116,84 +144,36 @@ while 1:
             A !roll comand has the following structure:
                 !roll diceAmount+d+diceSize+"+"+modifier
 
-            * Dice amount is an integer up to 99
-            * Dice Size is an integer up to 999
-            * Modifier is an integer up to 99 that is added onto the roll after
+            * Dice amount is an integer up to 20000
+            * Dice Size is an integer
+            * Modifier is an integer that is added onto the roll after
 
             The !Roll command can also have this structure:
                 !!roll d+diceAmount+d+diceSize+"+"+modifier
 
             * Dice amount is the result of a roll of said size and then proceeds
                 to roll that many of the following dice
-            * Dice Size is an integer up o 999
-            * Modifier is an integer up to 99 that is added onto the roll after            
+            * Dice Size is an integer
+            * Modifier is an integer that is added onto the roll after            
         '''
 
         command = getCommand(text)
         if command[0] == "!":
             chann = (text.split(":")[1]).split(" ")[2]
             if canRoll(irc, chann):
-                diceNumbers = [0,0,0,1] # First element the amount of dice
-                                        # Second element is the dice size
-                                        # Third element is the modifier
-                                        # Fourth is time rolled (hash)
-                middleDFlag = False
-                plusFlag = False
-                hashFlag = False
-                numberInCommand = "" # Buffer for the number
-                messageToSend = ""
-                command = command + " "
-                for index in range(0, len(command)):
+                diceNumbers = getRolledNumbers(command)
+                messageToSend = ''
 
-                    # Separates the values
-
-                    if command[index] == "#":
-                        diceNumbers[3] = int(numberInCommand)
-                        numberInCommand = ""
-                        continue
-
-                    if command[index] == "D":
-                        diceNumbers[0] = int(numberInCommand)
-                        numberInCommand = ""
-                        middleDFlag = True
-                        continue               
-
-                    if (command[index] == "+" or command[index+1] == " ") and middleDFlag and not plusFlag:
-                        diceNumbers[1] = int(numberInCommand)
-                        numberInCommand = ""
-                        if command[index] == "+":
-                            plusFlag = True
-                            continue
-                        if command[index+1] == " ":
-                            break
-
-                    if command[index+1] == " " and plusFlag:
-                        diceNumbers[2] = int(numberInCommand)
-                        numberInCommand = ""
-                        break
-
-                    try:
-                        int(command[index])
-                        numberInCommand = numberInCommand + command[index] #Makes a number from the string
-                    except ValueError:
-                        continue 
-
-                if diceNumbers[0] > 20000:
-                    diceNumbers[0] = 20000
+                if diceNumbers[0] > 10:
+                    diceNumbers[0] = 10
                 
-                if diceNumbers[3] > 10:
-                    diceNumbers[3] = 10
+                if diceNumbers[1] > 2000:
+                    diceNumbers[1] = 2000
 
-                rolledArray = []
-                for time in range(0, diceNumbers[3]):
-                    rollSum = 0
-                    for time in range(0, diceNumbers[0]):
-                        roll = random.randint(1, diceNumbers[1])
-                        rollSum = rollSum + roll
-                    rolledArray.append(rollSum)
+                rolledArray = roll(diceNumbers[0], diceNumbers[1], diceNumbers[2])
 
-                for roll in rolledArray:
-                    messageToSend = messageToSend + "("+str(diceNumbers[0])+"d"+str(diceNumbers[1])+"+"+str(diceNumbers[2])+") = ["+str(roll)+"+"+str(diceNumbers[2])+"] ==> {"+str(roll+diceNumbers[2])+"}. "
+                for rollNum in rolledArray:
+                    messageToSend = messageToSend + "("+str(diceNumbers[1])+"d"+str(diceNumbers[2])+"+"+str(diceNumbers[3])+") = ["+str(rollNum)+"+"+str(diceNumbers[3])+"] ==> {"+str(rollNum+diceNumbers[3])+"}. "
                 message = "PRIVMSG "+chann+" :"+messageToSend+"\r\n"
                 irc.send(message.encode("utf-8"))
                 print(text)
