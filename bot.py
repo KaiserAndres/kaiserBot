@@ -3,18 +3,18 @@
     Author: Andrés Villagra de la Fuente
     Creation date: 23:11 28/12/2015 (GMT-3)
     Last edit: 16:14 29/12/2015 (GMT-3)
-    Version: 1.0
+    Version: 1.1
 
     Description:
         This is a simple IRC bot made to work whenever the normal bot collapses
     also to perform other sort of stuff such as a personal archive for me cause
     I really never set that up.
 
-    Bugs list: <<Might get moved to another file, idk>> <<Move to git now>>
-        <R> 01: Will stop sending a message at a space isntead of at a \n
-        <R>02: The dice doesn't get the correct xdy values, hash doesn't work.
+    Finished features:
+        * Rolling
+        * Joining channels
+        * Tarot spreading
 '''
-
 
 import socket
 import sys
