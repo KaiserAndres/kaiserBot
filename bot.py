@@ -14,6 +14,10 @@
         * Rolling
         * Joining channels
         * Tarot spreading
+
+    03: Crash on command !Roll 1d20+3 asdas
+    04: Doesn't register modifier on !roll 1d20+03
+    05: Crash on !roll 1d20+
 '''
 
 import socket
