@@ -15,10 +15,6 @@
         * Joining channels
         * Tarot spreading
 
-    03: Crash on command !Roll 1d20+3 asdas
-    04: Doesn't register modifier on !roll 1d20+03
-    05: Crash on !roll 1d20+
-    06: !roll 1d20-1 doesn't consider the "-"
 '''
 
 import socket
@@ -91,20 +87,45 @@ def getRolledNumbers(command):
             3: modifier     -> default: 0
     '''
     rollNumbers = [1, 1, 20, 0]
-    numbers = command.split()[1] #Will always be 1 because of space locations.
+    try:
+        numbers = command.split()[1] #Will always be 1 because of space locations.
+    except:
+        numbers = ''
     if numbers.find("#") != -1:
-        rollNumbers[0] = int(numbers.split("#")[0])
+        try:
+            rollNumbers[0] = int(numbers.split("#")[0])
+        except:
+            rollNumbers[0] = 1
         numbers = numbers.split("#")[1]
     if numbers.find("D") != -1:
-        rollNumbers[1] = int(numbers.split("D")[0])
+        try:
+            rollNumbers[1] = int(numbers.split("D")[0])
+        except:
+            rollNumbers[1] = 1
+        try:
+            rollNumbers[2] = int(numbers.split("D")[1])
+        except:
+            rollNumbers[2] = 20
         numbers = numbers.split("D")[1]
     if numbers.find("+") != -1:
-        rollNumbers[2] = int(numbers.split("+")[0])
-        rollNumbers[3] = int(numbers.split("+")[1])
+        try:
+            rollNumbers[2] = int(numbers.split("+")[0])
+        except:
+            rollNumbers[2] = 20
+        try:    
+            rollNumbers[3] = int(numbers.split("+")[1])
+        except:
+            rollNumbers[3] = 0
         numbers = ""
     if numbers.find("-") != -1:
-        rollNumbers[2] = int(numbers.split("-")[0])
-        rollNumbers[3] = int(numbers.split("-")[1])*(-1)
+        try:
+            rollNumbers[2] = int(numbers.split("-")[0])
+        except:
+            rollNumbers[2]
+        try:
+            rollNumbers[3] = int(numbers.split("-")[1])*(-1)
+        except:
+            rollNumbers[3] = 0
         numbers = ""
     return rollNumbers
 
