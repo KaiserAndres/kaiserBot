@@ -69,7 +69,6 @@ server = "irc.esper.net"
 channel = "#RPGStuck"
 botnick = "KaiserBot"
 connected = False
-channels = ["#RPGStuck"]
 
 user = "USER "+ botnick +" "+ botnick +" "+ botnick +" :This is the KaiserBot!\n"
 nick = "NICK "+ botnick +"\n"
@@ -202,7 +201,6 @@ while 1:
             if chann != "":
                 joinMessage = "JOIN "+ chann +"\n"        
                 irc.send(joinMessage.encode("utf-8"))
-                channels.append(chann)
             else:
                 chann = (text.split(":")[1]).split(" ")[2]
                 message = "PRIVMSG "+chann+" :"+"Error 02: bad channel."+"\r\n"
