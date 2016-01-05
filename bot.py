@@ -49,6 +49,8 @@ def makeDeck(deck):
 server = "irc.esper.net"
 channel = "#RPGStuck"
 botnick = "KaiserBot"
+dontRoll = False
+connected = False
 
 user = "USER "+ botnick +" "+ botnick +" "+ botnick +" :This is the KaiserBot!\n"
 nick = "NICK "+ botnick +"\n"
@@ -68,14 +70,15 @@ while 1:
 
     if text.find("End of /MOTD command.".upper()) != -1:
         irc.send(join.encode("utf-8"))      #Used to join the channel, this is specific to
-                                            #esper, stupid motd...
+        connected = True                    #esper, stupid motd...
+
 
     if text.find('PING') != -1:
         pong = 'PONG ' + text.split() [1] + '\r\n'
         irc.send(pong.encode("utf-8"))
 
     # All checking code goes here
-    if text.find("!ROLL") != -1:
+    if text.find("!ROLL") != -1 and dontRoll:
         '''
             A !roll comand has the following structure:
                 !roll diceAmount+d+diceSize+"+"+modifier
@@ -260,8 +263,6 @@ while 1:
             message = "PRIVMSG "+chann+" :"+messageToSend+"\r\n"
             irc.send(message.encode("utf-8"))
 
-
-
     if text.find("!HELP") != -1:
         '''
             Help command, displays a string with help info.
@@ -274,3 +275,11 @@ while 1:
             chann = (text.split(":")[1]).split(" ")[2]
             message = "PRIVMSG "+chann+" :"+"Hello! I am KaiserBot, I am a tiny bot made my KaiserA, you can run the following commands on me: !roll, !join !help.!Roll uses the following parameters: !Roll <TIMES>#<AMOUNT OF DICE>d<MAX DIE>+<MOD> AMOUNT OF DIE and MAX DIE are obligatory.!Join takes the following parameters: !Join #<CHANNELNAME>. I am version 1.0 and I can be downloaded at the following adress: https://github.com/KaiserAndres/kaiserBot. I run on python 3.x so anyone who wants can host me!\r\n"
             irc.send(message.encode("utf-8"))
+
+    if connected:
+        irc.send("NAMES #RPGStuck\r\n".encode("utf-8"))
+        if irc.recv(2040).decode("utf-8").find("Tyche[Dice]"):
+            dontRoll = True
+        else:
+            dontRoll = False
+        irc.recv(2040)
