@@ -18,6 +18,7 @@
     03: Crash on command !Roll 1d20+3 asdas
     04: Doesn't register modifier on !roll 1d20+03
     05: Crash on !roll 1d20+
+    06: !roll 1d20-1 doesn't consider the "-"
 '''
 
 import socket
@@ -67,6 +68,17 @@ def canRoll(irc, channel):
         Roll = True
     irc.recv(2040)
     return Roll
+
+def roll(pararelRolls, diceAmmount, diceSize):
+    rolledArray = []
+    for time in range(0, pararelRolls):
+        rollSum = 0
+        for time in range(0, diceAmmount):
+            roll = random.randint(1, diceSize)
+            rollSum = rollSum + roll
+        rolledArray.append(rollSum)
+    return rolledArray
+
 
 
 server = "irc.esper.net"
