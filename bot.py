@@ -68,7 +68,6 @@ def canRoll(irc, channel):
 server = "irc.esper.net"
 channel = "#RPGStuck"
 botnick = "KaiserBot"
-connected = False
 
 user = "USER "+ botnick +" "+ botnick +" "+ botnick +" :This is the KaiserBot!\n"
 nick = "NICK "+ botnick +"\n"
@@ -88,7 +87,7 @@ while 1:
 
     if text.find("End of /MOTD command.".upper()) != -1:
         irc.send(join.encode("utf-8"))      #Used to join the channel, this is specific to
-        connected = True                    #esper, stupid motd...
+                                            #esper, stupid motd...
 
 
     if text.find('PING') != -1:
