@@ -113,20 +113,17 @@ while 1:
                 if command[index] == "#":
                     diceNumbers[3] = int(numberInCommand)
                     numberInCommand = ""
-                    print("number set 3")
                     continue
 
                 if command[index] == "D":
                     diceNumbers[0] = int(numberInCommand)
                     numberInCommand = ""
                     middleDFlag = True
-                    print("number set 0")
                     continue               
 
                 if (command[index] == "+" or command[index+1] == " ") and middleDFlag and not plusFlag:
                     diceNumbers[1] = int(numberInCommand)
                     numberInCommand = ""
-                    print("number set 1")
                     if command[index] == "+":
                         plusFlag = True
                         continue
@@ -136,7 +133,6 @@ while 1:
                 if command[index+1] == " " and plusFlag:
                     diceNumbers[2] = int(numberInCommand)
                     numberInCommand = ""
-                    print("number set 2")
                     break
 
                 try:
@@ -147,6 +143,9 @@ while 1:
 
             if diceNumbers[0] > 20000:
                 diceNumbers[0] = 20000
+            
+            if diceNumbers[3] > 10:
+                diceNumbers[3] = 10
 
             rolledArray = []
             for time in range(0, diceNumbers[3]):
