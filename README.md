@@ -7,8 +7,8 @@ the default channel and server address will be needed.
 
 # Commands:
 
-* !roll <Pararel Dice>#<Dice Ammount>d<Dice size>+||-<Modifier>
-* !tarot <Ammount of Cards>
-* !join #<Room>
+* !roll [Pararel Dice]#[Dice Ammount]d[Dice size]+||-[Modifier]
+* !tarot [Ammount of Cards]
+* !join #[Room]
 * !leave
 * !help
