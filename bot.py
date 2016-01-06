@@ -14,8 +14,7 @@
         * Rolling
         * Joining channels
         * Tarot spreading
-
-'''
+    '''
 
 import socket
 import sys
@@ -131,7 +130,7 @@ def getRolledNumbers(command):
 
 
 server = "irc.esper.net"
-channel = "#RPGStuck"
+channel = "#RPGSTUCK"
 botnick = "KaiserBot"
 
 user = "USER "+ botnick +" "+ botnick +" "+ botnick +" :This is the KaiserBot!\n"
@@ -310,3 +309,11 @@ while 1:
             chann = (text.split(":")[1]).split(" ")[2]
             message = "PRIVMSG "+chann+" :"+"Hello! I am KaiserBot, I am a tiny bot made my KaiserA, you can run the following commands on me: !roll, !join !help.!Roll uses the following parameters: !Roll <TIMES>#<AMOUNT OF DICE>d<MAX DIE>+<MOD> AMOUNT OF DIE and MAX DIE are obligatory.!Join takes the following parameters: !Join #<CHANNELNAME>. I am version 1.0 and I can be downloaded at the following adress: https://github.com/KaiserAndres/kaiserBot. I run on python 3.x so anyone who wants can host me!\r\n"
             irc.send(message.encode("utf-8"))
+
+    if text.find("!LEAVE") != -1:
+        command = getCommand(text)
+        if command[0] == "!":
+            chann = (text.split(":")[1]).split(" ")[2]
+            if chann != channel:
+                message = "PART "+chann+"\r\n"
+                irc.send(message.encode("utf-8"))
