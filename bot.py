@@ -20,33 +20,7 @@ import socket
 import sys
 import random
 import roller
-
-def getCommand(text):
-    '''
-        Paramenters:
-            text: String. Raw entry right out of the IRC protocol.
-
-        Returns the command sent, which is the following:
-            "!command <extra>"
-    '''
-    parts = text.split(":")
-    return parts[len(parts)-1]
-
-def getChannel(text):
-    '''
-        Paramenters:
-            text: String of data, raw command that comes from irc.
-
-        Returns: "#<CHANNEL NAME>"
-        If the channel the message is sent to is the name of the bot (AKA it is a PM)
-        Then Returns: "<Username>" where <Username> is the username of the user
-        who PMd the bot
-    '''
-    parts = text.split(":")
-    if (parts[len(parts)-2]).split(" ")[2] == botnick.upper():
-        return((parts[len(parts)-2]).split(" ")[0].split("!")[0])
-    else:
-        return ((parts[len(parts)-2]).split(" ")[2])
+import rawhandle
 
 def makeDeck(deck):
     '''
@@ -111,9 +85,9 @@ while 1:
             * Modifier is an integer that is added onto the roll after            
         '''
 
-        command = getCommand(text)
+        command = rawhandle.getCommand(text)
         if command[0] == "!":
-            chann = getChannel(text)
+            chann = rawhandle.getChannel(text)
             diceNumbers = roller.getRolledNumbers(command)
             messageToSend = ''
 
@@ -139,7 +113,7 @@ while 1:
                 !JOIN #CHANNEL 
             A message is sent to the irc server requesting to join #CHANNEL
         '''
-        command = getCommand(text)
+        command = rawhandle.getCommand(text)
         if command[0] == "!":
             chann = ""
             foundLink = False
@@ -152,12 +126,12 @@ while 1:
                 joinMessage = "JOIN "+ chann +"\n"        
                 irc.send(joinMessage.encode("utf-8"))
             else:
-                chann = getChannel(text)
+                chann = rawhandle.getChannel(text)
                 message = "PRIVMSG "+chann+" :"+"Error 02: bad channel."+"\r\n"
                 irc.send(message.encode("utf-8"))
 
     if text.find("!TAROT") != -1:
-        command = getCommand(text)
+        command = rawhandle.getCommand(text)
         if command[0] == "!" and text.find("PRIVMSG") != -1:
             '''
                 Tarot command asks for the number of cards to be drawed and returns them.
@@ -223,7 +197,7 @@ while 1:
                         cardsSpreaded.append(localDeck[cardIndex])
                 localDeck.remove(localDeck[cardIndex]) # Eliminates the card from the deck so it doesn't come twice
 
-            chann = getChannel(text)
+            chann = rawhandle.getChannel(text)
             messageToSend = "You got these cards: "
 
             for card in cardsSpreaded:
@@ -239,16 +213,16 @@ while 1:
                 * How to use the commands
                 * Where do download the bot
         '''
-        command = getCommand(text)
+        command = rawhandle.getCommand(text)
         if command[0] == "!":
-            chann = getChannel(text)
+            chann = rawhandle.getChannel(text)
             message = "PRIVMSG "+chann+" :"+"Hello! I am KaiserBot, I am a tiny bot made my KaiserA, you can run the following commands on me: !roll, !join !help.!Roll uses the following parameters: !Roll <TIMES>#<AMOUNT OF DICE>d<MAX DIE>+<MOD> AMOUNT OF DIE and MAX DIE are obligatory.!Join takes the following parameters: !Join #<CHANNELNAME>. I am version 1.0 and I can be downloaded at the following adress: https://github.com/KaiserAndres/kaiserBot. I run on python 3.x so anyone who wants can host me!\r\n"
             irc.send(message.encode("utf-8"))
 
     if text.find("!LEAVE") != -1:
-        command = getCommand(text)
+        command = rawhandle.getCommand(text)
         if command[0] == "!":
-            chann = getChannel(text)
+            chann = rawhandle.getChannel(text)
             if chann != channel:
                 message = "PART "+chann+"\r\n"
                 irc.send(message.encode("utf-8"))
