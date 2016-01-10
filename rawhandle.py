@@ -1,3 +1,6 @@
+f = open("settings.txt", 'r')
+botnick = (f.readline()).split(":")[1]
+f.close()
 def getCommand(text):
     '''
         Paramenters:

@@ -39,7 +39,9 @@ def makeDeck(deck):
 
 server = "irc.esper.net"
 channel = "#RPGSTUCK"
-botnick = input("Enter the name of your bot: ")
+f = open("settings.txt", 'r')
+botnick = (f.readline()).split(":")[1]
+f.close()
 
 user = "USER "+ botnick +" "+ botnick +" "+ botnick +" :This is the KaiserBot!\n"
 nick = "NICK "+ botnick +"\n"
