@@ -31,6 +31,17 @@ def getCommand(text):
     parts = text.split(":")
     return parts[len(parts)-1]
 
+def getChannel(text):
+    '''
+        Paramenters:
+            text: String of data, raw command that comes from irc.
+
+        Returns: "#<CHANNEL NAME>"
+    '''
+    parts = text.split(":")
+    print ((parts[len(parts)-2]).split(" ")[2])
+    return ((parts[len(parts)-2]).split(" ")[2])
+
 def makeDeck(deck):
     '''
         Paramenters:
@@ -179,24 +190,24 @@ while 1:
 
         command = getCommand(text)
         if command[0] == "!":
-            chann = (text.split(":")[1]).split(" ")[2]
-            if canRoll(irc, chann):
-                diceNumbers = getRolledNumbers(command)
-                messageToSend = ''
+            chann = getChannel(text)
+#            if canRoll(irc, chann):
+            diceNumbers = getRolledNumbers(command)
+            messageToSend = ''
 
-                if diceNumbers[0] > 10:
-                    diceNumbers[0] = 10
-                
-                if diceNumbers[1] > 2000:
-                    diceNumbers[1] = 2000
+            if diceNumbers[0] > 10:
+                diceNumbers[0] = 10
+            
+            if diceNumbers[1] > 2000:
+                diceNumbers[1] = 2000
 
-                rolledArray = roll(diceNumbers[0], diceNumbers[1], diceNumbers[2])
+            rolledArray = roll(diceNumbers[0], diceNumbers[1], diceNumbers[2])
 
-                for rollNum in rolledArray:
-                    messageToSend = messageToSend + "("+str(diceNumbers[1])+"d"+str(diceNumbers[2])+"+"+str(diceNumbers[3])+") = ["+str(rollNum)+"+"+str(diceNumbers[3])+"] ==> {"+str(rollNum+diceNumbers[3])+"}. "
-                message = "PRIVMSG "+chann+" :"+messageToSend+"\r\n"
-                irc.send(message.encode("utf-8"))
-                print(text)
+            for rollNum in rolledArray:
+                messageToSend = messageToSend + "("+str(diceNumbers[1])+"d"+str(diceNumbers[2])+"+"+str(diceNumbers[3])+") = ["+str(rollNum)+"+"+str(diceNumbers[3])+"] ==> {"+str(rollNum+diceNumbers[3])+"}. "
+            message = "PRIVMSG "+chann+" :"+messageToSend+"\r\n"
+            irc.send(message.encode("utf-8"))
+            print(message)
 
     if text.find("!JOIN") != -1 :
         '''
@@ -217,7 +228,7 @@ while 1:
                 joinMessage = "JOIN "+ chann +"\n"        
                 irc.send(joinMessage.encode("utf-8"))
             else:
-                chann = (text.split(":")[1]).split(" ")[2]
+                chann = getChannel(text)
                 message = "PRIVMSG "+chann+" :"+"Error 02: bad channel."+"\r\n"
                 irc.send(message.encode("utf-8"))
 
@@ -288,7 +299,7 @@ while 1:
                         cardsSpreaded.append(localDeck[cardIndex])
                 localDeck.remove(localDeck[cardIndex]) # Eliminates the card from the deck so it doesn't come twice
 
-            chann = (text.split(":")[1]).split(" ")[2]
+            chann = getChannel(text)
             messageToSend = "You got these cards: "
 
             for card in cardsSpreaded:
@@ -306,14 +317,14 @@ while 1:
         '''
         command = getCommand(text)
         if command[0] == "!":
-            chann = (text.split(":")[1]).split(" ")[2]
+            chann = getChannel(text)
             message = "PRIVMSG "+chann+" :"+"Hello! I am KaiserBot, I am a tiny bot made my KaiserA, you can run the following commands on me: !roll, !join !help.!Roll uses the following parameters: !Roll <TIMES>#<AMOUNT OF DICE>d<MAX DIE>+<MOD> AMOUNT OF DIE and MAX DIE are obligatory.!Join takes the following parameters: !Join #<CHANNELNAME>. I am version 1.0 and I can be downloaded at the following adress: https://github.com/KaiserAndres/kaiserBot. I run on python 3.x so anyone who wants can host me!\r\n"
             irc.send(message.encode("utf-8"))
 
     if text.find("!LEAVE") != -1:
         command = getCommand(text)
         if command[0] == "!":
-            chann = (text.split(":")[1]).split(" ")[2]
+            chann = getChannel(text)
             if chann != channel:
                 message = "PART "+chann+"\r\n"
                 irc.send(message.encode("utf-8"))
