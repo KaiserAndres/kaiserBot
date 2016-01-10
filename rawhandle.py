@@ -12,7 +12,19 @@ def getCommand(text):
     parts = text.split(":")
     return parts[len(parts)-1]
 
-def getChannel(text):
+def gerUserName(text):
+    '''
+        Paramenters:
+            text: String of data, raw command that comes from irc.
+
+        Returns:
+            Username
+    '''
+    parts = text.split(":")
+    name = parts.split[1]("!")[0]
+    return name
+
+def getChannel(text, botnick):
     '''
         Paramenters:
             text: String of data, raw command that comes from irc.
@@ -24,6 +36,7 @@ def getChannel(text):
     '''
     parts = text.split(":")
     if (parts[len(parts)-2]).split(" ")[2] == botnick.upper():
-        return((parts[len(parts)-2]).split(" ")[0].split("!")[0])
+        return getUserName(text)
     else:
         return ((parts[len(parts)-2]).split(" ")[2])
+
