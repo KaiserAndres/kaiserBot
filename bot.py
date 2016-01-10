@@ -39,7 +39,6 @@ def getChannel(text):
         Returns: "#<CHANNEL NAME>"
     '''
     parts = text.split(":")
-    print ((parts[len(parts)-2]).split(" ")[2])
     return ((parts[len(parts)-2]).split(" ")[2])
 
 def makeDeck(deck):
@@ -207,7 +206,6 @@ while 1:
                 messageToSend = messageToSend + "("+str(diceNumbers[1])+"d"+str(diceNumbers[2])+"+"+str(diceNumbers[3])+") = ["+str(rollNum)+"+"+str(diceNumbers[3])+"] ==> {"+str(rollNum+diceNumbers[3])+"}. "
             message = "PRIVMSG "+chann+" :"+messageToSend+"\r\n"
             irc.send(message.encode("utf-8"))
-            print(message)
 
     if text.find("!JOIN") != -1 :
         '''
