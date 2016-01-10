@@ -37,19 +37,26 @@ def makeDeck(deck):
     return baseDeck
     deckFile.close()
 
-server = "irc.esper.net"
-channel = "#RPGSTUCK"
-f = open("settings.txt", 'r')
-botnick = (f.readline()).split(":")[1]
+
+settings = {}
+with open('settings.txt','r') as f:
+	for line in f:
+		if line[len(line)-1] == "\n":
+			line = line[:-1]
+		splitLine = line.split("|")
+		settings[splitLine[0]] = ",".join(splitLine[1:])
+
+botnick = settings['BotNick']
+server = settings['Server'].split(":")
+channel = settings['Channels'].split(",")
 f.close()
 
 user = "USER "+ botnick +" "+ botnick +" "+ botnick +" :This is the KaiserBot!\n"
 nick = "NICK "+ botnick +"\n"
-join = "JOIN "+ channel +"\n"
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print("connecting to:"+server)
-irc.connect((server, 6667))
+print("connecting to:"+server[0])
+irc.connect((server[0], int(server[1])))
 irc.send(user.encode("utf-8"))
 irc.send(nick.encode("utf-8"))
 irc.send("PRIVMSG nickserv :iNOOPE\r\n".encode("utf-8"))
@@ -60,8 +67,9 @@ while 1:
     print(text)
 
     if text.find("End of /MOTD command.".upper()) != -1:
-        irc.send(join.encode("utf-8"))      #Used to join the channel, this is specific to
-                                            #esper, stupid motd...
+        for chans in channel:
+            join = "JOIN "+chans + "\n"
+            irc.send(join.encode("utf-8"))
 
 
     if text.find('PING') != -1:
