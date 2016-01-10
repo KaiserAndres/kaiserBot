@@ -87,7 +87,7 @@ while 1:
 
         command = rawhandle.getCommand(text)
         if command[0] == "!":
-            chann = rawhandle.getChannel(text)
+            chann = rawhandle.getChannel(text, botnick)
             diceNumbers = roller.getRolledNumbers(command)
             messageToSend = ''
 
@@ -126,7 +126,7 @@ while 1:
                 joinMessage = "JOIN "+ chann +"\n"        
                 irc.send(joinMessage.encode("utf-8"))
             else:
-                chann = rawhandle.getChannel(text)
+                chann = rawhandle.getChannel(text, botnick)
                 message = "PRIVMSG "+chann+" :"+"Error 02: bad channel."+"\r\n"
                 irc.send(message.encode("utf-8"))
 
@@ -197,7 +197,7 @@ while 1:
                         cardsSpreaded.append(localDeck[cardIndex])
                 localDeck.remove(localDeck[cardIndex]) # Eliminates the card from the deck so it doesn't come twice
 
-            chann = rawhandle.getChannel(text)
+            chann = rawhandle.getChannel(text, botnick)
             messageToSend = "You got these cards: "
 
             for card in cardsSpreaded:
@@ -215,7 +215,7 @@ while 1:
         '''
         command = rawhandle.getCommand(text)
         if command[0] == "!":
-            chann = rawhandle.getChannel(text)
+            chann = rawhandle.getChannel(text, botnick)
             message = "PRIVMSG "+chann+" :"+"Hello! I am KaiserBot, I am a tiny bot made my KaiserA, you can run the following commands on me: !roll, !join !help.!Roll uses the following parameters: !Roll <TIMES>#<AMOUNT OF DICE>d<MAX DIE>+<MOD> AMOUNT OF DIE and MAX DIE are obligatory.!Join takes the following parameters: !Join #<CHANNELNAME>. I am version 1.0 and I can be downloaded at the following adress: https://github.com/KaiserAndres/kaiserBot. I run on python 3.x so anyone who wants can host me!\r\n"
             irc.send(message.encode("utf-8"))
 

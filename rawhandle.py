@@ -9,7 +9,7 @@ def getCommand(text):
     parts = text.split(":")
     return parts[len(parts)-1]
 
-def getChannel(text):
+def getChannel(text, botnick):
     '''
         Paramenters:
             text: String of data, raw command that comes from irc.
