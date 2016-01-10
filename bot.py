@@ -64,7 +64,10 @@ irc.send("PRIVMSG nickserv :iNOOPE\r\n".encode("utf-8"))
 while 1:
     text=irc.recv(2040)
     text = text.decode("utf-8").upper()
-    print(text)
+    try:
+        print(text)
+    except(UnicodeEncodeError):
+        print("There was an invalid character here!")
 
     if text.find("End of /MOTD command.".upper()) != -1:
         for chans in channel:
