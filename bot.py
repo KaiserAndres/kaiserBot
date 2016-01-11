@@ -37,6 +37,14 @@ def makeDeck(deck):
     return baseDeck
     deckFile.close()
 
+#-------------------------------------------------------------------------------
+#
+#   Settings loader
+#
+#-------------------------------------------------------------------------------
+#   Loads the settings from the settings.txt file and loads them in the settings
+#   dictionary.
+#-------------------------------------------------------------------------------
 
 settings = {}
 with open('settings.txt','r') as f:
@@ -45,6 +53,8 @@ with open('settings.txt','r') as f:
 			line = line[:-1]
 		splitLine = line.split("|")
 		settings[splitLine[0]] = ",".join(splitLine[1:])
+
+#-------------------------------------------------------------------------------
 
 botnick = settings['BotNick']
 server = settings['Server'].split(":")
@@ -60,6 +70,12 @@ irc.connect((server[0], int(server[1])))
 irc.send(user.encode("utf-8"))
 irc.send(nick.encode("utf-8"))
 irc.send("PRIVMSG nickserv :iNOOPE\r\n".encode("utf-8"))
+
+#-------------------------------------------------------------------------------
+#
+#   Main reading loop
+#
+#-------------------------------------------------------------------------------
 
 while 1:
     text=irc.recv(2040)
