@@ -1,6 +1,41 @@
-f = open("settings.txt", 'r')
-botnick = (f.readline().split("|")[1])[:-1]
-f.close()
+'''
+    Title: Basic IRC bot
+    Last edit: 16:05 11/01/2016 (GMT -3)
+    Version: 1.0
+
+    Description:
+        This is a raw irc input handle library. It's main purpose is to facaili-
+        te the working with raw irc protocol. Most functions will take a text 
+        variable that represents one like of full raw irc uotput. The normal
+        format for this is the following:
+
+        :<USERNAME>!<HOST>:<IP> <COMMAND>
+
+    Functions:
+        getCommand()
+        getUserName()
+        getChannel()
+'''
+
+#-------------------------------------------------------------------------------
+#
+#   Settings loader
+#
+#-------------------------------------------------------------------------------
+#   Loads the settings from the settings.txt file
+#-------------------------------------------------------------------------------
+
+SettingsFile = open("settings.txt", 'r')
+botnick = (SettingsFile.readline().split("|")[1])[:-1]
+SettingsFile.close()
+
+#-------------------------------------------------------------------------------
+#
+#   Loadable functions
+#
+#-------------------------------------------------------------------------------
+
+
 def getCommand(text):
     '''
         Paramenters:
@@ -12,7 +47,7 @@ def getCommand(text):
     parts = text.split(":")
     return parts[len(parts)-1]
 
-def gerUserName(text):
+def getUserName(text):
     '''
         Paramenters:
             text: String of data, raw command that comes from irc.
