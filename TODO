@@ -5,3 +5,5 @@ TODO:
     * Save data on a server for analytics (maybe?)
     * Actually finish the damn thing --DONE
     * Archive --CURRENT WORK
+    * Move all functions to other files and clean up main file
+		In the base file there should only be base connecting, and references to other commands, and sending to the IRC the results
