@@ -85,6 +85,11 @@ while 1:
     except(UnicodeEncodeError):
         print("There was an invalid character here!")
 
+    #---------------------------------------------------------------------------
+    #   Joins the room after the MOTD has been fully recieved.
+    #   Change to whatever your irc server sends at the end of MOTD.
+    #---------------------------------------------------------------------------
+
     if text.find("End of /MOTD command.".upper()) != -1:
         for chans in channel:
             join = "JOIN "+chans + "\n"
@@ -95,7 +100,10 @@ while 1:
         pong = 'PONG ' + text.split() [1] + '\r\n'
         irc.send(pong.encode("utf-8"))
 
-    # All checking code goes here
+    #---------------------------------------------------------------------------
+    #   This area is for all commands sent in via the irc
+    #---------------------------------------------------------------------------
+
     if text.find("!ROLL") != -1:
         '''
             A !roll comand has the following structure:
@@ -120,19 +128,38 @@ while 1:
             diceNumbers = roller.getRolledNumbers(command)
             messageToSend = ''
 
+            #-------------------------------------------------------------------
+            #   Hard limits on the dice sizes
+            #-------------------------------------------------------------------
+
             if diceNumbers[0] > 10:
                 diceNumbers[0] = 10
             
             if diceNumbers[1] > 2000:
                 diceNumbers[1] = 2000
 
-            rolledArray = roller.roll(diceNumbers[0], diceNumbers[1], diceNumbers[2])
+            rolledArray = roller.roll(diceNumbers[0],
+                                      diceNumbers[1],
+                                      diceNumbers[2])
 
             for rollNum in rolledArray:
+                # REMINDER: make a message maker function cause this is ugly!
                 if(diceNumbers[3] == 0):
-                    messageToSend = messageToSend + "\x0312,15("+str(diceNumbers[1])+"d"+str(diceNumbers[2])+") \x032,15["+str(rollNum)+"]\x031,15 : \x034,15{"+str(rollNum+diceNumbers[3])+"} "
+                    messageToSend = (messageToSend + 
+                                    "\x0312,15("+str(diceNumbers[1])+
+                                    "d"+str(diceNumbers[2])+") \x032,15["+
+                                    str(rollNum)+"]\x031,15 : \x034,15{"+
+                                    str(rollNum+diceNumbers[3])+"} ")
                 else:
-                    messageToSend = messageToSend + "\x0312,15("+str(diceNumbers[1])+"d"+str(diceNumbers[2])+"+"+str(diceNumbers[3])+") \x032,15["+str(rollNum)+"+"+str(diceNumbers[3])+"]\x031,15 : \x034,15{"+str(rollNum+diceNumbers[3])+"} "
+                    messageToSend = (messageToSend + "\x0312,15("+
+                                     str(diceNumbers[1])+"d"+
+                                     str(diceNumbers[2])+"+"+
+                                     str(diceNumbers[3])+") \x032,15["+
+                                     str(rollNum)+"+"+
+                                     str(diceNumbers[3])+
+                                     "]\x031,15 : \x034,15{"+
+                                     str(rollNum+diceNumbers[3])+"} ")
+
             message = "PRIVMSG "+chann+" :"+messageToSend+"\r\n"
             irc.send(message.encode("utf-8"))
 
@@ -192,6 +219,10 @@ while 1:
             numberBuffer = ""
             numberEnd = 9
 
+            #-------------------------------------------------------------------
+            #   Gets the number from the command, should update soon.
+            #-------------------------------------------------------------------
+
             for characterIndex in range(0, len(command)):
                 try:
                     int(command[characterIndex])
@@ -200,12 +231,22 @@ while 1:
                 except ValueError:
                     continue
 
+            #-------------------------------------------------------------------
+            #   In case of no number given it uses the default of one.
+            #-------------------------------------------------------------------
+
             try:
                 amountOfCards = int(numberBuffer)
             except ValueError:
                 amountOfCards = 1
 
             cardsSpreaded = []
+
+            #-------------------------------------------------------------------
+            #   If the amount of cards it's too big the amount is set to 15
+            #   This is due to a limitation on the amount of data the irc will
+            #   Display.
+            #-------------------------------------------------------------------
 
             if amountOfCards > 15:
                 amountOfCards = 15
@@ -224,13 +265,18 @@ while 1:
                         cardsSpreaded.append("||"+localDeck[cardIndex])
                     else:
                         cardsSpreaded.append(localDeck[cardIndex])
-                localDeck.remove(localDeck[cardIndex]) # Eliminates the card from the deck so it doesn't come twice
+                # Eliminates the card from the deck so it doesn't come twice
+                localDeck.remove(localDeck[cardIndex]) 
 
             chann = rawhandle.getChannel(text, botnick)
             messageToSend = "You got these cards: "
 
             for card in cardsSpreaded:
                 messageToSend = messageToSend + card
+
+            #-------------------------------------------------------------------
+            #   Remier: Make a message sender function some day.
+            #-------------------------------------------------------------------
 
             message = "PRIVMSG "+chann+" :"+messageToSend+"\r\n"
             irc.send(message.encode("utf-8"))
@@ -245,7 +291,17 @@ while 1:
         command = rawhandle.getCommand(text)
         if command[0] == "!":
             chann = rawhandle.getChannel(text, botnick)
-            message = "PRIVMSG "+chann+" :"+"Hello! I am KaiserBot, I am a tiny bot made my KaiserA, you can run the following commands on me: !roll, !join !help.!Roll uses the following parameters: !Roll <TIMES>#<AMOUNT OF DICE>d<MAX DIE>+<MOD> AMOUNT OF DIE and MAX DIE are obligatory.!Join takes the following parameters: !Join #<CHANNELNAME>. I am version 1.0 and I can be downloaded at the following adress: https://github.com/KaiserAndres/kaiserBot. I run on python 3.x so anyone who wants can host me!\r\n"
+            message = ("PRIVMSG "+chann+" :"+"Hello! I am KaiserBot, I am a "+
+                       "tiny bot made my KaiserA, you can run the following "+
+                       "commands on me: !roll, !join !help.!Roll uses the "+
+                       "following parameters: !Roll <TIMES>#<AMOUNT OF "+
+                       "DICE>d<MAX DIE>+<MOD> AMOUNT OF DIE and MAX DIE are "+
+                       "obligatory.!Join takes the following parameters: !Join"+
+                       " #<CHANNELNAME>. I am version 1.0 and I can be "+
+                       "downloaded at the following adress: "+
+                       "https://github.com/KaiserAndres/kaiserBot. "+
+                       "I run on python 3.x so anyone who "+
+                       "wants can host me!\r\n")
             irc.send(message.encode("utf-8"))
 
     if text.find("!LEAVE") != -1:
