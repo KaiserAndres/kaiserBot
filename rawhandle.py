@@ -56,7 +56,8 @@ def getUserName(text):
             Username
     '''
     parts = text.split(":")
-    name = parts.split[1]("!")[0]
+    print(parts)
+    name = parts[1].split("!")[0]
     return name
 
 def getChannel(text, botnick):
