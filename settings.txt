@@ -1,3 +1,5 @@
 BotNick|NOTTyche[Dice]
 Server|irc.esper.net:6667
 Channels|#RPGStuck,#RPGStuck_Dice,#RPGStuck_Jamster,#RPGStuck_HMSTinfoil,#RPGStuck_erp,#RPGStuck_Layton,#RPGStuck_MotherBase,#RPGStuck_Strife,#RPGStuck_RedLotus,#RPGStuck_Procyon,#RPGStuck_potatopancakeparty,#RPGStuck_Orwell,#RPGStuck_nanakishi,#RPGStuck_Jaczac,#RPGStuck_Horrorterrors,#RPGStuck_Crownest,#RPGStuck_CaveOfMysteries
+Mail|andoresusoho.@gmail.com
+Pass|onetwothreefourfive
