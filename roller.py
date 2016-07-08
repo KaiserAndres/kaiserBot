@@ -10,7 +10,7 @@ def roll(pararelRolls, diceAmmount, diceSize):
         rolledArray.append(rollSum)
     return rolledArray
 
-def getRolledNumbers(command):
+def getRolledNumbers(command, isIrc = True):
     '''
         parameters:
             command: String with the following format:
@@ -22,10 +22,13 @@ def getRolledNumbers(command):
             3: modifier     -> default: 0
     '''
     rollNumbers = [1, 1, 20, 0]
-    try:
-        numbers = command.split()[1] #Will always be 1 because of space locations.
-    except:
-        numbers = ''
+    if isIrc:
+        try:
+            numbers = command.split()[1] #Will always be 1 because of space locations.
+        except:
+            numbers = ''
+    if not isIrc:
+        numbers = command
     if numbers.find("#") != -1:
         try:
             rollNumbers[0] = int(numbers.split("#")[0])
