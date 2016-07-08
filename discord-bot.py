@@ -49,7 +49,7 @@ async def roll(text : str):
                         "("+str(diceNumbers[1])+
                         "d"+str(diceNumbers[2])+") ["+
                         str(rollNum)+"] : {"+
-                        str(rollNum+diceNumbers[3])+"} ")
+                        str(rollNum+diceNumbers[3])+"} \n")
     else:
         messageToSend = (messageToSend + "("+
                          str(diceNumbers[1])+"d"+
@@ -58,7 +58,7 @@ async def roll(text : str):
                          str(rollNum)+"+"+
                          str(diceNumbers[3])+
                          "] : {"+
-                         str(rollNum+diceNumbers[3])+"} ")
+                         str(rollNum+diceNumbers[3])+"} \n")
   await client.say(messageToSend)
 
 
