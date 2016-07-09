@@ -40,8 +40,6 @@ async def roll(text : str):
   messageToSend = ""
   diceNumbers = roller.getRolledNumbers(text.upper(), False)
   results = roller.roll(diceNumbers[0], diceNumbers[1], diceNumbers[2])
-  for res in results:
-    res += diceNumbers[3]
 
   for rollNum in results:
     if(diceNumbers[3] == 0):
