@@ -65,4 +65,8 @@ def getRolledNumbers(command, isIrc = True):
         except:
             rollNumbers[3] = 0
         numbers = ""
+    if rollNumbers[0] > 100:
+        rollNumbers[0] = 100
+    if rollNumbers[1] > 100:
+        rollNumbers[1] = 100 
     return rollNumbers

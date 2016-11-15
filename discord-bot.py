@@ -59,6 +59,13 @@ async def roll(text : str):
                          str(rollNum+diceNumbers[3])+"} \n")
   await client.say(messageToSend)
 
+@client.command()
+async def fuck(stex: str):
+  await client.say("Of course I'll fuck " + stex)
+
+@client.command()
+async def fuckme():
+  await client.say("With pleasure (◕‿◕✿)")
 
 @client.event
 async def on_ready():
@@ -67,4 +74,4 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-client.run(settings["Mail"], settings["Pass"])
+client.run(settings["Token"])
