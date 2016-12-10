@@ -135,10 +135,16 @@ while 1:
             if diceNumbers[0] > 10:
                 diceNumbers[0] = 10
             
+            if diceNumbers[0] < 1:
+                diceNumbers[0] = 1
+
             if diceNumbers[1] > 2000:
                 diceNumbers[1] = 2000
             
-            if diceNumbers[2] == 0:
+            if diceNumbers[1] < 1:
+                diceNumbers[1] = 1
+
+            if diceNumbers[2] < 1:
                 diceNumbers[2] = 1
             rolledArray = roller.roll(diceNumbers[0],
                                       diceNumbers[1],
