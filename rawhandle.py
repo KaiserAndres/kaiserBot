@@ -17,24 +17,12 @@
         getChannel()
 '''
 
-#-------------------------------------------------------------------------------
-#
-#   Settings loader
-#
-#-------------------------------------------------------------------------------
-#   Loads the settings from the settings.txt file
-#-------------------------------------------------------------------------------
-
-SettingsFile = open("settings.txt", 'r')
-botnick = (SettingsFile.readline().split("|")[1])[:-1]
-SettingsFile.close()
-
-#-------------------------------------------------------------------------------
-#
-#   Loadable functions
-#
-#-------------------------------------------------------------------------------
-
+class Message:
+    def __init__(self, text, botNick):
+        self.nick = botNick
+        self.userName = getUserName(text)
+        self.text = getCommand(text)
+        self.channel = getChannel(text, self.nick)
 
 def getCommand(text):
     '''
@@ -56,7 +44,6 @@ def getUserName(text):
             Username
     '''
     parts = text.split(":")
-    print(parts)
     name = parts[1].split("!")[0]
     return name
 
@@ -75,4 +62,4 @@ def getChannel(text, botnick):
         return getUserName(text)
     else:
         return ((parts[len(parts)-2]).split(" ")[2])
-
+    

@@ -48,11 +48,11 @@ def makeDeck(deck):
 
 settings = {}
 with open('settings.txt','r') as f:
-	for line in f:
-		if line[len(line)-1] == "\n":
-			line = line[:-1]
-		splitLine = line.split("|")
-		settings[splitLine[0]] = ",".join(splitLine[1:])
+    for line in f:
+        if line[len(line)-1] == "\n":
+            line = line[:-1]
+        splitLine = line.split("|")
+        settings[splitLine[0]] = ",".join(splitLine[1:])
 
 #-------------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ print("connecting to:"+server[0])
 irc.connect((server[0], int(server[1])))
 irc.send(user.encode("utf-8"))
 irc.send(nick.encode("utf-8"))
-irc.send("PRIVMSG nickserv :iNOOPE\r\n".encode("utf-8"))
+#irc.send("PRIVMSG nickserv :iNOOPE\r\n".encode("utf-8"))
 
 #-------------------------------------------------------------------------------
 #
