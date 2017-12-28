@@ -124,7 +124,7 @@ def tarot_exec(irc, message):
                 * king
             Major arcana have 22 cards.
         '''
-        localDeck = makeDeck("deck")
+        localDeck = load_deck("deck")
         numberBuffer = ""
         numberEnd = 9
 
@@ -180,17 +180,12 @@ def tarot_exec(irc, message):
         irc.send(message.reply(messageToSend))
 
 
-def makeDeck(deck):
-    '''
-        Paramenters:
-            deck: string of the location fo the file with the cards saved
-                as a line each.
+def load_deck(deck_file_name):
+    deck_file = open(deck_file_name, "r")
+    deck_text = deck_file.readlines()
+    deck = []
+    deck_file.close()
 
-        Returns a deck array containing the cards located in the file deck.
-    '''
-    deckFile = open(deck, "r")
-    baseDeck = deckFile.readlines()
-    for index in range(0, len(baseDeck)):
-        baseDeck[index] = baseDeck[index][:-1]
-    return baseDeck
-    deckFile.close()
+    for card in deck_text:
+        deck.append(card[:-1])
+    return deck
