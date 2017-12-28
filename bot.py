@@ -1,41 +1,10 @@
-'''
-    Title: Basic IRC bot
-    Author: Andrés Villagra de la Fuente
-    Creation date: 23:11 28/12/2015 (GMT-3)
-    Last edit: 16:14 29/12/2015 (GMT-3)
-    Version: 1.1
 
-    Description:
-        This is a simple IRC bot made to work whenever the normal bot collapses
-    also to perform other sort of stuff such as a personal archive for me cause
-    I really never set that up.
-
-    Finished features:
-        * Rolling
-        * Joining channels
-        * Tarot spreading
-    '''
 
 import socket
-import sys
 import random
 import roller
 import rawhandle
-
-def makeDeck(deck):
-    '''
-        Paramenters:
-            deck: string of the location fo the file with the cards saved
-                as a line each.
-
-        Returns a deck array containing the cards located in the file deck.
-    '''
-    deckFile = open(deck, "r")
-    baseDeck = deckFile.readlines()
-    for index in range(0, len(baseDeck)):
-        baseDeck[index] = baseDeck[index][:-1]
-    return baseDeck
-    deckFile.close()
+import helper_functions as hf
 
 #-------------------------------------------------------------------------------
 #
@@ -71,12 +40,6 @@ irc.send(user.encode("utf-8"))
 irc.send(nick.encode("utf-8"))
 #irc.send("PRIVMSG nickserv :iNOOPE\r\n".encode("utf-8"))
 
-#-------------------------------------------------------------------------------
-#
-#   Main reading loop
-#
-#-------------------------------------------------------------------------------
-
 while 1:
     text=irc.recv(2040)
     text = text.decode("utf-8").upper()
@@ -84,6 +47,8 @@ while 1:
         print(text)
     except(UnicodeEncodeError):
         print("There was an invalid character here!")
+
+    mess = rawhandle.Message(text, botnick)
 
     #---------------------------------------------------------------------------
     #   Joins the room after the MOTD has been fully recieved.
@@ -95,199 +60,21 @@ while 1:
             join = "JOIN "+chans + "\n"
             irc.send(join.encode("utf-8"))
 
-
     if text.find('PING') != -1:
-        pong = 'PONG ' + text.split() [1] + '\r\n'
-        irc.send(pong.encode("utf-8"))
+        hf.ping_exec(irc, mess)
 
     #---------------------------------------------------------------------------
     #   This area is for all commands sent in via the irc
     #---------------------------------------------------------------------------
 
     if text.find("!ROLL") != -1:
-        '''
-            A !roll comand has the following structure:
-                !roll diceAmount+d+diceSize+"+"+modifier
+        hf.roll_exec(irc, mess)
 
-            * Dice amount is an integer up to 20000
-            * Dice Size is an integer
-            * Modifier is an integer that is added onto the roll after
-
-            The !Roll command can also have this structure:
-                !!roll d+diceAmount+d+diceSize+"+"+modifier
-
-            * Dice amount is the result of a roll of said size and then proceeds
-                to roll that many of the following dice
-            * Dice Size is an integer
-            * Modifier is an integer that is added onto the roll after            
-        '''
-
-        command = rawhandle.getCommand(text)
-        if command[0] == "!":
-            chann = rawhandle.getChannel(text, botnick)
-            diceNumbers = roller.getRolledNumbers(command)
-            messageToSend = ''
-
-            #-------------------------------------------------------------------
-            #   Hard limits on the dice sizes
-            #-------------------------------------------------------------------
-
-            if diceNumbers[0] > 10:
-                diceNumbers[0] = 10
-            
-            if diceNumbers[0] < 1:
-                diceNumbers[0] = 1
-
-            if diceNumbers[1] > 2000:
-                diceNumbers[1] = 2000
-            
-            if diceNumbers[1] < 1:
-                diceNumbers[1] = 1
-
-            if diceNumbers[2] < 1:
-                diceNumbers[2] = 1
-            rolledArray = roller.roll(diceNumbers[0],
-                                      diceNumbers[1],
-                                      diceNumbers[2])
-
-            for rollNum in rolledArray:
-                # REMINDER: make a message maker function cause this is ugly!
-                if(diceNumbers[3] == 0):
-                    messageToSend = (messageToSend + 
-                                    "\x0312,15("+str(diceNumbers[1])+
-                                    "d"+str(diceNumbers[2])+") \x032,15["+
-                                    str(rollNum)+"]\x031,15 : \x034,15{"+
-                                    str(rollNum+diceNumbers[3])+"} ")
-                else:
-                    messageToSend = (messageToSend + "\x0312,15("+
-                                     str(diceNumbers[1])+"d"+
-                                     str(diceNumbers[2])+"+"+
-                                     str(diceNumbers[3])+") \x032,15["+
-                                     str(rollNum)+"+"+
-                                     str(diceNumbers[3])+
-                                     "]\x031,15 : \x034,15{"+
-                                     str(rollNum+diceNumbers[3])+"} ")
-
-            message = "PRIVMSG "+chann+" :"+messageToSend+"\r\n"
-            irc.send(message.encode("utf-8"))
-
-    if text.find("!JOIN") != -1 :
-        '''
-            A join command has the following structure:
-                !JOIN #CHANNEL 
-            A message is sent to the irc server requesting to join #CHANNEL
-        '''
-        command = rawhandle.getCommand(text)
-        if command[0] == "!":
-            chann = ""
-            foundLink = False
-            for char in command:
-                if char == "#":
-                    foundLink = True
-                if foundLink:
-                    chann = chann + char
-            if chann != "":
-                joinMessage = "JOIN "+ chann +"\n"        
-                irc.send(joinMessage.encode("utf-8"))
-            else:
-                chann = rawhandle.getChannel(text, botnick)
-                message = "PRIVMSG "+chann+" :"+"Error 02: bad channel."+"\r\n"
-                irc.send(message.encode("utf-8"))
+    if text.find("!JOIN") != -1:
+        hf.join_exec(irc, mess)
 
     if text.find("!TAROT") != -1:
-        command = rawhandle.getCommand(text)
-        if command[0] == "!" and text.find("PRIVMSG") != -1:
-            '''
-                Tarot command asks for the number of cards to be drawed and returns them.
-                A tarot command has the following structure:
-                    !tarot <NUMBER OF CARDS>
-                Thre are 5 types:
-                    * Major arcana
-                    * Swords
-                    * Wands
-                    * Pentacles
-                    * Cups
-                The minor arcana have the following cards:
-                    * 1
-                    * 2
-                    * 3
-                    * 4
-                    * 5
-                    * 6
-                    * 7
-                    * 8
-                    * 9
-                    * 10
-                    * page
-                    * queen
-                    * king
-                Major arcana have 22 cards.
-            '''
-            localDeck = makeDeck("deck")
-            numberBuffer = ""
-            numberEnd = 9
-
-            #-------------------------------------------------------------------
-            #   Gets the number from the command, should update soon.
-            #-------------------------------------------------------------------
-
-            for characterIndex in range(0, len(command)):
-                try:
-                    int(command[characterIndex])
-                    if characterIndex < numberEnd:
-                        numberBuffer = numberBuffer + command[characterIndex]
-                except ValueError:
-                    continue
-
-            #-------------------------------------------------------------------
-            #   In case of no number given it uses the default of one.
-            #-------------------------------------------------------------------
-
-            try:
-                amountOfCards = int(numberBuffer)
-            except ValueError:
-                amountOfCards = 1
-
-            cardsSpreaded = []
-
-            #-------------------------------------------------------------------
-            #   If the amount of cards it's too big the amount is set to 15
-            #   This is due to a limitation on the amount of data the irc will
-            #   Display.
-            #-------------------------------------------------------------------
-
-            if amountOfCards > 15:
-                amountOfCards = 15
-
-            for time in range(0, amountOfCards):
-                cardIndex = random.randint(0, len(localDeck)-1)
-                reversedOrNot = random.randint(0,1)
-                if reversedOrNot == 1:
-                    if time != 0:
-                        cardsSpreaded.append("||"+localDeck[cardIndex]+"(reversed)")
-                    else:
-                        cardsSpreaded.append(localDeck[cardIndex]+"(reversed)")
-
-                elif reversedOrNot != 1:
-                    if time != 0:
-                        cardsSpreaded.append("||"+localDeck[cardIndex])
-                    else:
-                        cardsSpreaded.append(localDeck[cardIndex])
-                # Eliminates the card from the deck so it doesn't come twice
-                localDeck.remove(localDeck[cardIndex]) 
-
-            chann = rawhandle.getChannel(text, botnick)
-            messageToSend = "You got these cards: "
-
-            for card in cardsSpreaded:
-                messageToSend = messageToSend + card
-
-            #-------------------------------------------------------------------
-            #   Remier: Make a message sender function some day.
-            #-------------------------------------------------------------------
-
-            message = "PRIVMSG "+chann+" :"+messageToSend+"\r\n"
-            irc.send(message.encode("utf-8"))
+        hf.tarot_exec(irc, mess)
 
     if text.find("!HELP") != -1:
         '''

@@ -17,12 +17,25 @@
         getChannel()
 '''
 
+
 class Message:
-    def __init__(self, text, botNick):
-        self.nick = botNick
+
+    def __init__(self, text, bot_nick):
+        self.nick = bot_nick
+
+        if text.startswith("PING"):
+            self.userName = ""
+            self.channel = ""
+            self.text = text
+            return
+
         self.userName = getUserName(text)
         self.text = getCommand(text)
         self.channel = getChannel(text, self.nick)
+
+    def reply(self, text):
+        return ("PRIVMSG " + self.channel + " :" + text + "\r\n").encode("utf-8")
+
 
 def getCommand(text):
     '''
@@ -34,6 +47,7 @@ def getCommand(text):
     '''
     parts = text.split(":")
     return parts[len(parts)-1]
+
 
 def getUserName(text):
     '''
@@ -47,6 +61,7 @@ def getUserName(text):
     name = parts[1].split("!")[0]
     return name
 
+
 def getChannel(text, botnick):
     '''
         Paramenters:
@@ -57,9 +72,11 @@ def getChannel(text, botnick):
         Then Returns: "<Username>" where <Username> is the username of the user
         who PMd the bot
     '''
-    parts = text.split(":")
-    if (parts[len(parts)-2]).split(" ")[2] == botnick.upper():
+    sub_sections = text.split(":")
+    temp_var = sub_sections[len(sub_sections)-2]
+    if len(sub_sections) < 3:
+        return "no channel"
+    if temp_var[2] == botnick.upper():
         return getUserName(text)
     else:
-        return ((parts[len(parts)-2]).split(" ")[2])
-    
+        return (sub_sections[len(sub_sections)-2]).split(" ")[2]
