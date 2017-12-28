@@ -3,6 +3,7 @@ import random
 
 DEFAULT_CARD_AMOUNT = 1
 MAX_CARDS = 15
+CARD_SEPARATOR = "||"
 
 
 def ping_exec(irc, message):
@@ -116,25 +117,19 @@ def tarot_exec(irc, message):
 def spread_cards(card_amount):
     card_spread = []
     local_deck = load_deck("deck")
-    # If the amount of cards it's too big the amount is set to 15
-    # This is due to a limitation on the amount of data the irc will
-    # Display.
     for time in range(0, card_amount):
-        cardIndex = random.randint(0, len(local_deck) - 1)
-        reversedOrNot = random.randint(0, 1)
-        if reversedOrNot == 1:
-            if time != 0:
-                card_spread.append("||" + local_deck[cardIndex] + "(reversed)")
-            else:
-                card_spread.append(local_deck[cardIndex] + "(reversed)")
+        card_index = random.randint(0, len(local_deck) - 1)
+        is_reversed = random.randint(0, 1) == 1
 
-        elif reversedOrNot != 1:
-            if time != 0:
-                card_spread.append("||" + local_deck[cardIndex])
-            else:
-                card_spread.append(local_deck[cardIndex])
+        card_text = local_deck[card_index]
+        if time != 0:
+            card_text = CARD_SEPARATOR + card_text
+        if is_reversed:
+            card_text = card_text + "(reversed)"
+        card_spread.append(card_text)
+
         # Eliminates the card from the deck so it doesn't come twice
-        local_deck.remove(local_deck[cardIndex])
+        local_deck.remove(local_deck[card_index])
     return card_spread
 
 
