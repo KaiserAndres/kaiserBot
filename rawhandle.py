@@ -29,15 +29,15 @@ class Message:
             self.text = text
             return
 
-        self.userName = getUserName(text)
-        self.text = getCommand(text)
-        self.channel = getChannel(text, self.nick)
+        self.userName = get_user_name(text)
+        self.text = get_command(text)
+        self.channel = get_channel(text, self.nick)
 
     def reply(self, text):
         return ("PRIVMSG " + self.channel + " :" + text + "\r\n").encode("utf-8")
 
 
-def getCommand(text):
+def get_command(text):
     '''
         Paramenters:
             text: String. Raw entry right out of the IRC protocol.
@@ -49,7 +49,7 @@ def getCommand(text):
     return parts[len(parts)-1]
 
 
-def getUserName(text):
+def get_user_name(text):
     '''
         Paramenters:
             text: String of data, raw command that comes from irc.
@@ -62,7 +62,7 @@ def getUserName(text):
     return name
 
 
-def getChannel(text, botnick):
+def get_channel(text, bot_nick):
     '''
         Paramenters:
             text: String of data, raw command that comes from irc.
@@ -76,7 +76,7 @@ def getChannel(text, botnick):
     temp_var = sub_sections[len(sub_sections)-2]
     if len(sub_sections) < 3:
         return "no channel"
-    if temp_var[2] == botnick.upper():
-        return getUserName(text)
+    if temp_var[2] == bot_nick.upper():
+        return get_user_name(text)
     else:
         return (sub_sections[len(sub_sections)-2]).split(" ")[2]
