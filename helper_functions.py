@@ -141,7 +141,6 @@ def spread_cards(card_amount):
 def get_card_amount(message):
     number_buffer = ""
     number_end = 9
-    # Gets the number from the command, should update soon.
     for characterIndex in range(0, len(message.text)):
         try:
             int(message.text[characterIndex])
@@ -149,16 +148,15 @@ def get_card_amount(message):
                 number_buffer = number_buffer + message.text[characterIndex]
         except ValueError:
             continue
-    # In case of no number given it uses the default of one.
     try:
-        amountOfCards = int(number_buffer)
+        card_amount = int(number_buffer)
     except ValueError:
-        amountOfCards = DEFAULT_CARD_AMOUNT
+        card_amount = DEFAULT_CARD_AMOUNT
 
-    if amountOfCards > MAX_CARDS:
-        amountOfCards = MAX_CARDS
+    if card_amount > MAX_CARDS:
+        card_amount = MAX_CARDS
 
-    return amountOfCards
+    return card_amount
 
 
 def load_deck(deck_file_name):
