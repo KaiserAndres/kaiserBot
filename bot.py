@@ -10,30 +10,30 @@ with open('settings.txt', 'r') as f:
         splitLine = line.split("|")
         settings[splitLine[0]] = ",".join(splitLine[1:])
 
-botnick = settings['BotNick']
+bot_nick = settings['BotNick']
 server = settings['Server'].split(":")
-channel = settings['Channels'].split(",")
+channel_list = settings['Channels'].split(",")
 f.close()
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print("connecting to:" + server[0])
 irc.connect((server[0], int(server[1])))
-irc.send(("USER " + botnick + " " + botnick + " " + botnick + " :This is the KaiserBot!\n").encode("utf-8"))
-irc.send(("NICK " + botnick + "\n").encode("utf-8"))
+irc.send(("USER " + bot_nick + " " + bot_nick + " " + bot_nick + " :This is the KaiserBot!\n").encode("utf-8"))
+irc.send(("NICK " + bot_nick + "\n").encode("utf-8"))
 
 while 1:
     text = irc.recv(2040)
     text = text.decode("utf-8").upper()
     try:
         print(text)
-    except(UnicodeEncodeError):
+    except UnicodeEncodeError:
         print("There was an invalid character here!")
 
-    mess = rawhandle.Message(text, botnick)
+    mess = rawhandle.Message(text, bot_nick)
 
     if text.find("End of /MOTD command.".upper()) != -1:
-        for chans in channel:
-            join = "JOIN "+chans + "\n"
+        for channel in channel_list:
+            join = "JOIN " + channel + "\n"
             irc.send(join.encode("utf-8"))
 
     if text.find('PING') != -1:
@@ -64,9 +64,7 @@ while 1:
             irc.send(mess.reply(help_string).encode("utf-8"))
 
     if text.find("!LEAVE") != -1:
-        command = rawhandle.getCommand(text)
-        if command[0] == "!":
-            chann = rawhandle.getChannel(text, botnick)
-            if chann != channel:
-                message = "PART "+chann+"\r\n"
+        if mess.text[0] == "!":
+            if mess.channel != channel_list[0]:
+                message = "PART " + mess.channel + "\r\n"
                 irc.send(message.encode("utf-8"))
