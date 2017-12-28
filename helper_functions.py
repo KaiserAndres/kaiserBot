@@ -99,85 +99,66 @@ def join_exec(irc, message):
 def tarot_exec(irc, message):
     if message.text[0] == "!":
         '''
-            Tarot command asks for the number of cards to be drawed and returns them.
+            Tarot command asks for the number of cards to be drawn and returns them.
             A tarot command has the following structure:
                 !tarot <NUMBER OF CARDS>
-            Thre are 5 types:
-                * Major arcana
-                * Swords
-                * Wands
-                * Pentacles
-                * Cups
-            The minor arcana have the following cards:
-                * 1
-                * 2
-                * 3
-                * 4
-                * 5
-                * 6
-                * 7
-                * 8
-                * 9
-                * 10
-                * page
-                * queen
-                * king
-            Major arcana have 22 cards.
         '''
-        localDeck = load_deck("deck")
-        numberBuffer = ""
-        numberEnd = 9
+        card_amount = get_card_amount(message)
+        card_spread = spread_cards(card_amount)
 
-        # Gets the number from the command, should update soon.
+        output_message = "You got these cards: "
+        for card in card_spread:
+            output_message = output_message + card
 
-        for characterIndex in range(0, len(message.text)):
-            try:
-                int(message.text[characterIndex])
-                if characterIndex < numberEnd:
-                    numberBuffer = numberBuffer + message.text[characterIndex]
-            except ValueError:
-                continue
+        irc.send(message.reply(output_message))
 
-        # In case of no number given it uses the default of one.
 
+def spread_cards(card_amount):
+    card_spread = []
+    local_deck = load_deck("deck")
+    # If the amount of cards it's too big the amount is set to 15
+    # This is due to a limitation on the amount of data the irc will
+    # Display.
+    for time in range(0, card_amount):
+        cardIndex = random.randint(0, len(local_deck) - 1)
+        reversedOrNot = random.randint(0, 1)
+        if reversedOrNot == 1:
+            if time != 0:
+                card_spread.append("||" + local_deck[cardIndex] + "(reversed)")
+            else:
+                card_spread.append(local_deck[cardIndex] + "(reversed)")
+
+        elif reversedOrNot != 1:
+            if time != 0:
+                card_spread.append("||" + local_deck[cardIndex])
+            else:
+                card_spread.append(local_deck[cardIndex])
+        # Eliminates the card from the deck so it doesn't come twice
+        local_deck.remove(local_deck[cardIndex])
+    return card_spread
+
+
+def get_card_amount(message):
+    number_buffer = ""
+    number_end = 9
+    # Gets the number from the command, should update soon.
+    for characterIndex in range(0, len(message.text)):
         try:
-            amountOfCards = int(numberBuffer)
+            int(message.text[characterIndex])
+            if characterIndex < number_end:
+                number_buffer = number_buffer + message.text[characterIndex]
         except ValueError:
-            amountOfCards = DEFAULT_CARD_AMOUNT
+            continue
+    # In case of no number given it uses the default of one.
+    try:
+        amountOfCards = int(number_buffer)
+    except ValueError:
+        amountOfCards = DEFAULT_CARD_AMOUNT
 
-        cardsSpreaded = []
+    if amountOfCards > MAX_CARDS:
+        amountOfCards = MAX_CARDS
 
-        # If the amount of cards it's too big the amount is set to 15
-        # This is due to a limitation on the amount of data the irc will
-        # Display.
-
-        if amountOfCards > MAX_CARDS:
-            amountOfCards = MAX_CARDS
-
-        for time in range(0, amountOfCards):
-            cardIndex = random.randint(0, len(localDeck)-1)
-            reversedOrNot = random.randint(0,1)
-            if reversedOrNot == 1:
-                if time != 0:
-                    cardsSpreaded.append("||"+localDeck[cardIndex]+"(reversed)")
-                else:
-                    cardsSpreaded.append(localDeck[cardIndex]+"(reversed)")
-
-            elif reversedOrNot != 1:
-                if time != 0:
-                    cardsSpreaded.append("||"+localDeck[cardIndex])
-                else:
-                    cardsSpreaded.append(localDeck[cardIndex])
-            # Eliminates the card from the deck so it doesn't come twice
-            localDeck.remove(localDeck[cardIndex])
-
-        messageToSend = "You got these cards: "
-
-        for card in cardsSpreaded:
-            messageToSend = messageToSend + card
-
-        # TODO: Make a message sender function some day.
-        irc.send(message.reply(messageToSend))
+    return amountOfCards
 
 
 def load_deck(deck_file_name):
