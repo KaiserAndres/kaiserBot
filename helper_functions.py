@@ -106,10 +106,7 @@ def tarot_exec(irc, message):
         '''
         card_amount = get_card_amount(message)
         card_spread = spread_cards(card_amount)
-
-        output_message = "You got these cards: "
-        for card in card_spread:
-            output_message = output_message + card
+        output_message = "You got these cards: " + CARD_SEPARATOR.join(card_spread)
 
         irc.send(message.reply(output_message))
 
@@ -122,13 +119,10 @@ def spread_cards(card_amount):
         is_reversed = random.randint(0, 1) == 1
 
         card_text = local_deck[card_index]
-        if time != 0:
-            card_text = CARD_SEPARATOR + card_text
         if is_reversed:
             card_text = card_text + "(reversed)"
         card_spread.append(card_text)
 
-        # Eliminates the card from the deck so it doesn't come twice
         local_deck.remove(local_deck[card_index])
     return card_spread
 
