@@ -1,4 +1,8 @@
-BotNick|Tyche[Dice]
+BotNick|TycheTesting
 Server|irc.esper.net:6667
 Channels|#rpgstuck_Tzivos,#rpgstuck_Azeleon,#RPGStuck,#RPGStuck_Dice,#RPGStuck_Jamster,#RPGStuck_HMSTinfoil,#RPGStuck_erp,#RPGStuck_Layton,#RPGStuck_MotherBase,#RPGStuck_Strife,#RPGStuck_RedLotus,#RPGStuck_Procyon,#RPGStuck_potatopancakeparty,#RPGStuck_Orwell,#RPGStuck_nanakishi,#RPGStuck_Jaczac,#RPGStuck_Horrorterrors,#RPGStuck_Crownest,#RPGStuck_CaveOfMysteries
 Token|MjA5NjQxMTI1Mzg3MDQyODE4.CoO6kA.-lS-IQlTKat-hG-1yjpuOSTjtAE
+NotBotNick|kaiTest
+NotServer|irc.esper.net:6667
+NotChannels|#kaiser_test
+NotToken|MjA5NjQxMTI1Mzg3MDQyODE4.CoO6kA.-lS-IQlTKat-hG-1yjpuOSTjtAE
