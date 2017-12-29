@@ -13,6 +13,10 @@ class MessageTest(unittest.TestCase):
         message = Message("PING :300472EC", BOT_NAME)
         self.assertEqual(message.userName, "")
 
+    def test_timeout_message_empty_username(self):
+        message = Message(":CLOSING LINK: HOST55.170-80-170.NETWORK.NET (CONNECTION TIMED OUT)", BOT_NAME)
+        self.assertEqual(message.userName, "")
+
     def test_username(self):
         message = Message(":KAISER_!~QUASSEL@HOST55.170-80-170.NETWORK.NET PRIVMSG #KAISER_TEST :!TAROT 6", BOT_NAME)
         self.assertEqual(message.userName, "KAISER_")

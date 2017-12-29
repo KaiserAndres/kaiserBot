@@ -7,7 +7,7 @@ CARD_SEPARATOR = "||"
 
 
 def ping_exec(irc, message):
-    pong = 'PONG ' + message.text.split()[0] + '\r\n'
+    pong = 'PONG ' + message.text.split(":")[1] + '\r\n'
     irc.send(pong.encode("utf-8"))
 
 

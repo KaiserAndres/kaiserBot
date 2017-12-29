@@ -24,7 +24,7 @@ class Message:
         self.nick = bot_nick
         self.raw = text
 
-        if text.startswith("PING"):
+        if not contains(text, "PRIVMSG"):
             self.userName = ""
             self.channel = ""
             self.text = text
@@ -36,6 +36,10 @@ class Message:
 
     def reply(self, text):
         return ("PRIVMSG " + self.channel + " :" + text + "\r\n").encode("utf-8")
+
+
+def contains(text, content):
+    return text.find(content) != -1
 
 
 def get_command(text):

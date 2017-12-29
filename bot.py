@@ -57,6 +57,7 @@ while 1:
                 irc.send(join.encode("utf-8"))
 
         if text.find('PING') != -1:
+            logging.debug("Sending PONG message.")
             hf.ping_exec(irc, mess)
 
         if text.find("!ROLL") != -1:
