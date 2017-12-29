@@ -22,6 +22,7 @@ class Message:
 
     def __init__(self, text, bot_nick):
         self.nick = bot_nick
+        self.raw = text
 
         if text.startswith("PING"):
             self.userName = ""
@@ -79,4 +80,4 @@ def get_channel(text, bot_nick):
     if temp_var[2] == bot_nick.upper():
         return get_user_name(text)
     else:
-        return (sub_sections[len(sub_sections)-2]).split(" ")[2]
+        return temp_var.split(" ")[2]

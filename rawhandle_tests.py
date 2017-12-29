@@ -5,9 +5,13 @@ from rawhandle import Message
 BOT_NAME = "kaiTest"
 
 class MessageTest(unittest.TestCase):
-    def test_ping(self):
+    def test_ping_identity(self):
         message = Message("PING :300472EC", BOT_NAME)
         self.assertEqual(message.text, "PING :300472EC")
+
+    def test_ping_username_is_empty(self):
+        message = Message("PING :300472EC", BOT_NAME)
+        self.assertEqual(message.userName, "")
 
     def test_username(self):
         message = Message(":KAISER_!~QUASSEL@HOST55.170-80-170.NETWORK.NET PRIVMSG #KAISER_TEST :!TAROT 6", BOT_NAME)
