@@ -28,11 +28,11 @@ irc.send(("NICK " + bot_nick + "\n").encode("utf-8"))
 logging.info("Connection successful.")
 
 
-def log_failure(error, message):
+def log_failure(error, text):
     logging.error(error.__class__)
     logging.error(error.args)
     logging.error(error.message)
-    logging.error(message.raw)
+    logging.error(text)
 
 
 while 1:
@@ -46,7 +46,7 @@ while 1:
     try:
         mess = rawhandle.Message(text, bot_nick)
     except Exception as inst:
-        log_failure(inst, mess)
+        log_failure(inst, text)
         continue
 
     try:
@@ -90,4 +90,4 @@ while 1:
                     irc.send(message.encode("utf-8"))
 
     except Exception as inst:
-        log_failure(inst, mess)
+        log_failure(inst, mess.raw)
