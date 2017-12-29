@@ -92,3 +92,4 @@ while 1:
 
     except Exception as inst:
         log_failure(inst, mess.raw)
+        continue
