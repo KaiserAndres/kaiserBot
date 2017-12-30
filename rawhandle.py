@@ -91,10 +91,3 @@ def get_channel(text, bot_nick):
     if channel == "":
         raise Exception("No channel found")
     return channel
-    #temp_var = sub_sections[len(sub_sections)-2]
-    if len(sub_sections) < 3:
-        return "no channel"
-    if temp_var == bot_nick.upper():
-        return get_user_name(text)
-    else:
-        return temp_var.split(" ")[2]
