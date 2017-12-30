@@ -38,6 +38,11 @@ class MessageTest(unittest.TestCase):
         message = Message(":OREA!KIWIIRC@CPC1166-HEHE14-2-0-CUST57.9-1.CABLE.VIRGINM.NET PRIVMSG #RPGSTUCK_REDLOTUS::C", BOT_NAME)
         self.assertEqual(message.channel, "#RPGSTUCK_REDLOTUS")
 
+    def test_message_with_url(self):
+        text = ":SEAN_AYRES!WEBCHAT@D162-156.NETWORK:COM PRIVMSG #RPGSTUCK_REDLOTUS :HTTPS://PASTEBIN.COM/A6ECRGD7"
+        message = Message(text, BOT_NAME)
+        self.assertEqual(message.text, "HTTPS://PASTEBIN.COM/A6ECRGD7")
+
 
 if __name__ == '__main__':
     unittest.main()

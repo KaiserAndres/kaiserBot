@@ -51,7 +51,15 @@ def get_command(text):
             "!command <extra>"
     '''
     parts = text.split(":")
-    return parts[len(parts)-1]
+    begin_of_message_posiotion = -1
+    for n, part in enumerate(parts):
+        if contains(part, "PRIVMSG"):
+            begin_of_message_posiotion = n
+
+    if n == -1:
+        raise Exception("Unable to find message")
+    return ":".join(parts[-begin_of_message_posiotion:])
+
 
 
 def get_user_name(text):
@@ -85,8 +93,10 @@ def get_channel(text, bot_nick):
     for word in temp_var.split(" "):
         if contains(word, "#"):
             channel = word
+            break
         if word == bot_nick:
             channel = get_user_name(text)
+            break
 
     if channel == "":
         raise Exception("No channel found")
