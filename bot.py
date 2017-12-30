@@ -57,20 +57,20 @@ while 1:
                 join = "JOIN " + channel + "\n"
                 irc.send(join.encode("utf-8"))
 
-        if text.find('PING') != -1:
+        if mess.text.startswith('PING'):
             logging.debug("Sending PONG message.")
             hf.ping_exec(irc, mess)
 
-        if text.find("!ROLL") != -1:
+        if mess.text.startswith("!ROLL"):
             hf.roll_exec(irc, mess)
 
-        if text.find("!JOIN") != -1:
+        if mess.text.startswith("!JOIN"):
             hf.join_exec(irc, mess)
 
-        if text.find("!TAROT") != -1:
+        if mess.text.startswith("!TAROT"):
             hf.tarot_exec(irc, mess)
 
-        if text.find("!HELP") != -1:
+        if mess.text.startswith("!HELP"):
             if mess.text[0] == "!":
                 help_string = ("Hello! I am KaiserBot, I am a " +
                                 "tiny bot made my KaiserA, you can run the following " +
@@ -85,7 +85,7 @@ while 1:
                                 "wants can host me!\r\n")
                 irc.send(mess.reply(help_string))
 
-        if text.find("!LEAVE") != -1:
+        if mess.text.startswith("!LEAVE"):
             if mess.text[0] == "!":
                 if mess.channel != channel_list[0]:
                     message = "PART " + mess.channel + "\r\n"
