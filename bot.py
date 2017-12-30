@@ -1,52 +1,16 @@
-import socket
 import logging
+from startup import load_config, connect
 from rawhandle import Message
 from bot_executables import ping_exec, join_exec, roll_exec, tarot_exec
 
 
 logging.basicConfig(filename="bot.log", level=logging.DEBUG)
-
 logging.info("Loading settings")
-
-
-def load_config():
-    config_dict = {}
-    with open('settings.txt', 'r') as f:
-        for line in f:
-            if line[len(line) - 1] == "\n":
-                line = line[:-1]
-            split_line = line.split("|")
-            config_dict[split_line[0]] = ",".join(split_line[1:])
-        f.close()
-    return config_dict
-
-
 settings = load_config()
-
 bot_nick = settings['BotNick']
 ip, port = settings['Server'].split(":")
 channel_list = settings['Channels'].split(",")
-
-
-def connect(ip, port, bot_nick):
-    irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    logging.info("Connecting to: " + ip)
-    irc.connect((ip, int(port)))
-    irc.send(("USER " + bot_nick + " " + bot_nick + " " + bot_nick + " :This is the KaiserBot!\n").encode("utf-8"))
-    irc.send(("NICK " + bot_nick + "\n").encode("utf-8"))
-    logging.info("Connection successful.")
-    return irc
-
-
 irc = connect(ip, port, bot_nick)
-
-
-def log_failure(error, text):
-    logging.error(error.__class__)
-    logging.error(error.args)
-    logging.error(error.message)
-    logging.error(text)
-
 
 while 1:
     text = irc.recv(2040)
