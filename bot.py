@@ -4,7 +4,7 @@ from rawhandle import Message
 from bot_executables import ping_exec, join_exec, roll_exec, tarot_exec
 
 
-logging.basicConfig(filename="bot.log", level=logging.DEBUG)
+logging.basicConfig(filename="bot.log", level=logging.INFO)
 logging.info("Loading settings")
 settings = load_config()
 bot_nick = settings['BotNick']
@@ -15,6 +15,11 @@ irc = connect(ip, port, bot_nick)
 while 1:
     text = irc.recv(2040)
     text = text.decode("utf-8").upper()
+
+    if not text:
+        logging.error("Connection died, attempting reconnecting:")
+        irc = connect(ip, port, bot_nick)
+
     try:
         logging.debug(text)
     except UnicodeEncodeError:
@@ -63,10 +68,10 @@ while 1:
                 irc.send(mess.reply(help_string))
 
         if mess.text.startswith("!LEAVE"):
-            if mess.text[0] == "!":
-                if mess.channel != channel_list[0]:
-                    message = "PART " + mess.channel + "\r\n"
-                    irc.send(message.encode("utf-8"))
+            if mess.channel != settings["DefaultChannel"].upper():
+                logging.info("Leaving channel " + mess.channel + ": " + mess.userName + " send the command.")
+                message = "PART " + mess.channel + "\r\n"
+                irc.send(message.encode("utf-8"))
 
     except Exception as inst:
         log_failure(inst, mess.raw)
