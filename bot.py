@@ -53,6 +53,7 @@ while 1:
         if text.find("End of /MOTD command.".upper()) != -1:
             logging.info("Connection established, joining channels.")
             for channel in channel_list:
+                logging.debug("Joining " + channel)
                 join = "JOIN " + channel + "\n"
                 irc.send(join.encode("utf-8"))
 
@@ -82,7 +83,7 @@ while 1:
                                 "https://github.com/KaiserAndres/kaiserBot. " +
                                 "I run on python 3.x so anyone who " +
                                 "wants can host me!\r\n")
-                irc.send(mess.reply(help_string).encode("utf-8"))
+                irc.send(mess.reply(help_string))
 
         if text.find("!LEAVE") != -1:
             if mess.text[0] == "!":
