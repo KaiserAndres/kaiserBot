@@ -1,31 +1,44 @@
 import socket
 import logging
-import rawhandle
-import helper_functions as hf
+from rawhandle import Message
+from bot_executables import ping_exec, join_exec, roll_exec, tarot_exec
 
 
-logging.basicConfig(filename="bot.log", level=logging.INFO)
+logging.basicConfig(filename="bot.log", level=logging.DEBUG)
 
 logging.info("Loading settings")
-settings = {}
-with open('settings.txt', 'r') as f:
-    for line in f:
-        if line[len(line)-1] == "\n":
-            line = line[:-1]
-        splitLine = line.split("|")
-        settings[splitLine[0]] = ",".join(splitLine[1:])
+
+
+def load_config():
+    config_dict = {}
+    with open('settings.txt', 'r') as f:
+        for line in f:
+            if line[len(line) - 1] == "\n":
+                line = line[:-1]
+            split_line = line.split("|")
+            config_dict[split_line[0]] = ",".join(split_line[1:])
+        f.close()
+    return config_dict
+
+
+settings = load_config()
 
 bot_nick = settings['BotNick']
-server = settings['Server'].split(":")
+ip, port = settings['Server'].split(":")
 channel_list = settings['Channels'].split(",")
-f.close()
 
-irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-logging.info("Connecting to: " + server[0])
-irc.connect((server[0], int(server[1])))
-irc.send(("USER " + bot_nick + " " + bot_nick + " " + bot_nick + " :This is the KaiserBot!\n").encode("utf-8"))
-irc.send(("NICK " + bot_nick + "\n").encode("utf-8"))
-logging.info("Connection successful.")
+
+def connect(ip, port, bot_nick):
+    irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    logging.info("Connecting to: " + ip)
+    irc.connect((ip, int(port)))
+    irc.send(("USER " + bot_nick + " " + bot_nick + " " + bot_nick + " :This is the KaiserBot!\n").encode("utf-8"))
+    irc.send(("NICK " + bot_nick + "\n").encode("utf-8"))
+    logging.info("Connection successful.")
+    return irc
+
+
+irc = connect(ip, port, bot_nick)
 
 
 def log_failure(error, text):
@@ -44,7 +57,7 @@ while 1:
         logging.error("There was an invalid character here!")
 
     try:
-        mess = rawhandle.Message(text, bot_nick)
+        mess = Message(text, bot_nick)
     except Exception as inst:
         log_failure(inst, text)
         continue
@@ -59,16 +72,16 @@ while 1:
 
         if mess.text.startswith('PING'):
             logging.debug("Sending PONG message.")
-            hf.ping_exec(irc, mess)
+            ping_exec(irc, mess)
 
         if mess.text.startswith("!ROLL"):
-            hf.roll_exec(irc, mess)
+            roll_exec(irc, mess)
 
         if mess.text.startswith("!JOIN"):
-            hf.join_exec(irc, mess)
+            join_exec(irc, mess)
 
         if mess.text.startswith("!TAROT"):
-            hf.tarot_exec(irc, mess)
+            tarot_exec(irc, mess)
 
         if mess.text.startswith("!HELP"):
             if mess.text[0] == "!":
