@@ -1,5 +1,5 @@
 import logging
-from startup import load_config, connect
+from startup import load_config, connect, log_failure
 from rawhandle import Message
 from bot_executables import ping_exec, join_exec, roll_exec, tarot_exec
 
