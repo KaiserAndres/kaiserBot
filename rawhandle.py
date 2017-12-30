@@ -77,11 +77,24 @@ def get_channel(text, bot_nick):
         Then Returns: "<Username>" where <Username> is the username of the user
         who PMd the bot
     '''
+    channel = ""
     sub_sections = text.split(":")
-    temp_var = sub_sections[len(sub_sections)-2]
+    for section in sub_sections:
+        if contains(section, "PRIVMSG"):
+            temp_var = section
+    for word in temp_var.split(" "):
+        if contains(word, "#"):
+            channel = word
+        if word == bot_nick:
+            channel = get_user_name(text)
+
+    if channel == "":
+        raise Exception("No channel found")
+    return channel
+    #temp_var = sub_sections[len(sub_sections)-2]
     if len(sub_sections) < 3:
         return "no channel"
-    if temp_var[2] == bot_nick.upper():
+    if temp_var == bot_nick.upper():
         return get_user_name(text)
     else:
         return temp_var.split(" ")[2]

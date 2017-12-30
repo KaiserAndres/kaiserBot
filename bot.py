@@ -4,7 +4,7 @@ from rawhandle import Message
 from bot_executables import ping_exec, join_exec, roll_exec, tarot_exec
 
 
-logging.basicConfig(filename="bot.log", level=logging.INFO)
+logging.basicConfig(filename="bot.log", level=logging.DEBUG)
 logging.info("Loading settings")
 settings = load_config()
 bot_nick = settings['BotNick']
