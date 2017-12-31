@@ -43,6 +43,12 @@ class MessageTest(unittest.TestCase):
         message = Message(text, BOT_NAME)
         self.assertEqual("HTTPS://PASTEBIN.COM/A6ECRGD7", message.text)
 
+    def test_help_message_reading_crash(self):
+        text = "HELLO! I AM KAISERBOT, I AM A TINY BOT MADE MY KAISERA, YOU CAN RUN THE FOLLOWING COMMANDS ON ME: !ROLL, !JOIN !HELP.!ROLL USES THE FOLLOWING PARAMETERS: !ROLL <TIMES>#<AMOUNT OF DICE>D<MAX DIE>+<MOD> AMOUNT OF DIE AND MAX DIE ARE OBLIGATORY.!JOIN TAKES THE FOLLOWING PARAMETERS: !JOIN #<CHANNELNAME>. I AM VERSION 1.0 AND I CAN BE DOWNLOADED AT THE FOLLOWING ADDRESS: HTTPS://GITHUB.COM/KAISERANDRES/KAISERBOT. I RUN ON PYTHON 3.X S"
+        irc_text = ":TYCHE[DICE-TESTING]!~TYCHEDICE@159.203.126.111 PRIVMSG " + BOT_NAME + " :" + text
+        message = Message(irc_text, BOT_NAME)
+        self.assertEqual(text, message.text)
+
 
 if __name__ == '__main__':
     unittest.main()

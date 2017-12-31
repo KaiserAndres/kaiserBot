@@ -55,10 +55,11 @@ def get_command(text):
     for n, part in enumerate(parts):
         if contains(part, "PRIVMSG"):
             begin_of_message_posiotion = n
+            break
 
-    if n == -1:
+    if begin_of_message_posiotion == -1:
         raise Exception("Unable to find message")
-    return ":".join(parts[-begin_of_message_posiotion:])
+    return ":".join(parts[begin_of_message_posiotion + 1:])
 
 
 
