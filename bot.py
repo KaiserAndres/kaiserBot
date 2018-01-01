@@ -4,7 +4,11 @@ from rawhandle import Message
 from bot_executables import ping_exec, join_exec, roll_exec, tarot_exec
 
 
-logging.basicConfig(filename="bot.log", level=logging.DEBUG)
+version = "1.6"
+
+logging.basicConfig(filename="bot.log",
+                    format="%(asctime)s - %(levelname)s : %(message)s",
+                    level=logging.DEBUG if version.endswith("a") else logging.INFO)
 logging.info("Loading settings")
 settings = load_config()
 bot_nick = settings['BotNick']
@@ -69,7 +73,7 @@ while 1:
 
         if mess.text.startswith("!LEAVE"):
             if mess.channel != settings["DefaultChannel"].upper():
-                logging.info("Leaving channel " + mess.channel + ": " + mess.userName + " send the command.")
+                logging.info("Leaving channel " + mess.channel + ": " + mess.userName + " sent the command.")
                 message = "PART " + mess.channel + "\r\n"
                 irc.send(message.encode("utf-8"))
 
