@@ -34,7 +34,7 @@ def build_irc_join_command(room):
     return ("JOIN " + room + "\n").encode("utf-8")
 
 
-class JoinCommandsTestCase(ExecutionTest):
+class JoinCommandTestCase(ExecutionTest):
     def test_join_command_valids(self):
         rooms = ["#fake_room_1", "#fake_room_3"]
         join_exec(self.irc, build_join_message(build_join_command(rooms)))
@@ -54,6 +54,13 @@ class JoinCommandsTestCase(ExecutionTest):
                 self.assertIn(build_irc_join_command(room), self.irc.messages)
             else:
                 self.assertNotIn(build_irc_join_command(room), self.irc.messages)
+
+
+class PingCommandTestCase(ExecutionTest):
+    def test_ping_call(self):
+        ping_body = ":12345678910"
+        ping_exec(self.irc, Message("PING "+ping_body, BOT_NICK))
+        self.assertEqual(("PONG "+ping_body+"\r\n").encode("utf-8"), self.irc.messages[0])
 
 
 if __name__ == '__main__':
