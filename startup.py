@@ -28,3 +28,7 @@ def log_failure(error, text):
     logging.exception("Found an exeption while executing: ")
     logging.error(text)
 
+
+def join(irc, room):
+    logging.info("Joining " + room)
+    irc.send(("JOIN " + room + "\n").encode("utf-8"))

@@ -1,5 +1,6 @@
 import roller
 import random
+from startup import join
 
 DEFAULT_CARD_AMOUNT = 1
 MAX_CARDS = 15
@@ -81,18 +82,9 @@ def join_exec(irc, message):
         !JOIN #CHANNEL 
     A message is sent to the irc server requesting to join #CHANNEL
     '''
-    chann = ""
-    foundLink = False
-    for char in message.text:
-        if char == "#":
-            foundLink = True
-        if foundLink:
-            chann = chann + char
-    if chann != "":
-        join_message = "JOIN " + chann + "\n"
-        irc.send(join_message.encode("utf-8"))
-    else:
-        irc.send(message.reply("Error 02: bad channel."))
+    for room in message.text.split():
+        if room.startswith("#"):
+            join(irc, room)
 
 
 def tarot_exec(irc, message):

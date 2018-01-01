@@ -1,10 +1,10 @@
 import logging
-from startup import load_config, connect, log_failure
+from startup import load_config, connect, log_failure, join
 from rawhandle import Message
 from bot_executables import ping_exec, join_exec, roll_exec, tarot_exec
 
 
-version = "1.6"
+version = "1.7.1a"
 
 logging.basicConfig(filename="bot.log",
                     format="%(asctime)s - %(levelname)s : %(message)s",
@@ -39,9 +39,7 @@ while 1:
         if text.find("End of /MOTD command.".upper()) != -1:
             logging.info("Connection established, joining channels.")
             for channel in channel_list:
-                logging.debug("Joining " + channel)
-                join = "JOIN " + channel + "\n"
-                irc.send(join.encode("utf-8"))
+                join(irc, channel)
 
         if mess.text.startswith('PING'):
             logging.debug("Sending PONG message.")

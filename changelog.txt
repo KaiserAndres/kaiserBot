@@ -1,0 +1,2 @@
+Features:
+ [x] Multi channel join
