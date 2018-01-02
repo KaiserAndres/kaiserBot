@@ -134,6 +134,9 @@ def get_card_amount(message):
     if card_amount > MAX_CARDS:
         card_amount = MAX_CARDS
 
+    if card_amount <= 0:
+        card_amount = 1
+
     return card_amount
 
 
